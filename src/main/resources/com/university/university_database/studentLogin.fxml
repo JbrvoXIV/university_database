@@ -8,7 +8,6 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@application.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.university.university_database.StudentController">
    <left>
       <AnchorPane prefHeight="400.0" prefWidth="208.0" style="-fx-background-color: #e5e5e7; -fx-border-color: black; -fx-border-width: 0 2 0 0;" BorderPane.alignment="CENTER">
@@ -23,7 +22,7 @@
                   <Font name="Courier New Bold" size="16.0" />
                </font>
             </Label>
-            <Button alignment="CENTER" layoutX="47.0" layoutY="251.0" mnemonicParsing="false" prefHeight="52.0" prefWidth="112.0" text="Register Now!" textAlignment="CENTER" wrapText="true">
+            <Button alignment="CENTER" layoutX="47.0" layoutY="251.0" mnemonicParsing="false" onAction="#switchToStudentRegisterForm" prefHeight="52.0" prefWidth="112.0" text="Register Now!" textAlignment="CENTER" wrapText="true">
                <font>
                   <Font name="Courier New" size="13.0" />
                </font>
@@ -34,7 +33,7 @@
    <right>
       <AnchorPane prefHeight="400.0" prefWidth="393.0" BorderPane.alignment="CENTER">
          <children>
-            <Label alignment="CENTER" layoutY="24.0" prefHeight="31.0" prefWidth="393.0" text="University XYZ">
+            <Label alignment="CENTER" layoutY="24.0" prefHeight="31.0" prefWidth="393.0" styleClass="universityTitle" text="University XYZ">
                <font>
                   <Font size="26.0" />
                </font>

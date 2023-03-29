@@ -4,15 +4,20 @@
 }
 
 label {
-    -fx-font-size: 12px;
-    -fx-font-family: "Courier New";
+    -fx-font-size: 20px;
 }
 
-.universityTitle {
-    fx-font-size: 48px;
-    fx-font-family: "Courier New";
+.title {
+    -fx-font-size: 30px;
+    -fx-border-color: #000000;
+    -fx-border-width: 0 0 2px 0;
 }
 
 #welcomeLabel {
     -fx-font-size: 15px;
+}
+
+.formLabel {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
 }
