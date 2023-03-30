@@ -7,8 +7,8 @@ public class Professor extends Person {
 
     private final int departmentID;
 
-    public Professor(String ID, String firstName, String lastName, String address, String phone, String email, int departmentID) {
-        super(ID, firstName, lastName, address, phone, email);
+    public Professor(String ID, String password, String firstName, String lastName, String address, String phone, String email, int departmentID) {
+        super(ID, password, firstName, lastName, address, phone, email);
 
         if(!validateDepartmentID(departmentID)) {
             throw new IllegalArgumentException("The department ID is not a valid value! Please select correctly");

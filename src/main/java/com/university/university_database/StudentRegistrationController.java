@@ -1,6 +1,7 @@
 package com.university.university_database;
 
 import com.university.univerity_database.schemas.Student;
+import com.university.univerity_database.schemas.Table;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -16,6 +17,8 @@ public class StudentRegistrationController {
 
     @FXML
     private TextField studentIDRegistration;
+    @FXML
+    private TextField studentPasswordRegistration;
     @FXML
     private TextField studentFirstNameRegistration;
     @FXML
@@ -34,6 +37,7 @@ public class StudentRegistrationController {
     public void submitStudentRegistrationForm(ActionEvent e) {
         Student s;
         String ID = studentIDRegistration.getText();
+        String password = studentPasswordRegistration.getText();
         String firstName = studentFirstNameRegistration.getText();
         String lastName = studentLastNameRegistration.getText();
         String address = studentAddressRegistration.getText();
@@ -42,17 +46,10 @@ public class StudentRegistrationController {
         LocalDate dob = studentDOBRegistration.getValue();
 
         try {
-            s = new Student(ID, firstName, lastName, address, phone, email, dob);
+            s = new Student(ID, password, firstName, lastName, address, phone, email, dob);
         } catch(Exception ex) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Incorrect Input");
-            alert.setHeaderText("You've entered incorrect input, see below for more information.");
-            alert.setContentText(ex.getMessage());
-
-            if(alert.showAndWait().get() == ButtonType.OK) {
-                Stage stage = (Stage)studentRegistrationForm.getScene().getWindow();
-                stage.close();
-            }
+            triggerAlert("Incorrect Input", "You've entered incorrect input, see below for more information.", ex);
+            return;
         } finally {
             studentIDRegistration.setText("");
             studentFirstNameRegistration.setText("");
@@ -62,6 +59,28 @@ public class StudentRegistrationController {
             studentEmailRegistration.setText("");
             studentDOBRegistration.setValue(null);
         }
+
+        try {
+            insertNewStudent(s);
+        } catch(Exception ex) {
+            triggerAlert("", "", ex);
+        }
+    }
+
+    private void triggerAlert(String title, String message, Exception ex) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(message);
+        alert.setContentText(ex.getMessage());
+
+        if(alert.showAndWait().get() == ButtonType.OK) {
+            Stage stage = (Stage)studentRegistrationForm.getScene().getWindow();
+            stage.close();
+        }
+    }
+
+    private void insertNewStudent(Student s) {
+        SQLController.insertPerson(Table.STUDENT, s);
     }
 
     public void revertToStudentLogin(ActionEvent e) {

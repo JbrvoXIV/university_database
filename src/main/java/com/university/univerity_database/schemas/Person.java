@@ -5,20 +5,22 @@ import java.time.LocalDate;
 public abstract class Person {
 
     protected int ID;
+    protected String password;
     protected String firstName;
     protected String lastName;
     protected String address;
     protected String phone;
     protected String email;
 
-    public Person(String ID, String firstName, String lastName, String address, String phone, String email) {
-        IllegalArgumentException e = validateInputs(ID, firstName, lastName, address, phone, email);
+    public Person(String ID, String password, String firstName, String lastName, String address, String phone, String email) {
+        IllegalArgumentException e = validateInputs(ID, password, firstName, lastName, address, phone, email);
 
         if(e != null) {
             throw e; // error was found in inputs
         }
 
         this.ID = Integer.parseInt(ID);
+        this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
@@ -26,9 +28,12 @@ public abstract class Person {
         this.email = email;
     }
 
-    private IllegalArgumentException validateInputs(String ID, String firstName, String lastName, String address, String phone, String email) {
+    private IllegalArgumentException validateInputs(String ID, String password, String firstName, String lastName, String address, String phone, String email) {
         if(!validateID(ID)) {
             return new IllegalArgumentException("The ID value you entered, " + ID + ", is incorrect! Please try again.");
+        }
+        if(!validatePassword(password)) {
+            return new IllegalArgumentException("The password value you entered, " + password + ", is too long! Please try again.");
         }
         if(!firstName.matches("[a-zA-Z]+")) {
             return new IllegalArgumentException("The first name, " + firstName + ", contains non-alphabetic values! Please try again.");
@@ -57,6 +62,11 @@ public abstract class Person {
             idParsed = -1;
         }
         return idParsed >= 100000 && idParsed <= 999999;
+    }
+
+    private boolean validatePassword(String password) {
+        boolean isCorrectLength = password.length() <= 50;
+        return isCorrectLength;
     }
 
     private boolean validateAddress(String address) {

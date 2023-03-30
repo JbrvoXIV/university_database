@@ -2,6 +2,7 @@ package com.university.university_database;
 
 import com.university.univerity_database.schemas.Department;
 import com.university.univerity_database.schemas.Professor;
+import com.university.univerity_database.schemas.Table;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -19,6 +20,8 @@ public class ProfessorRegistrationController implements Initializable {
     @FXML
     private TextField professorIDRegistration;
     @FXML
+    private TextField professorPasswordRegistration;
+    @FXML
     private TextField professorFirstNameRegistration;
     @FXML
     private TextField professorLastNameRegistration;
@@ -35,6 +38,7 @@ public class ProfessorRegistrationController implements Initializable {
     public void submitProfessorRegistrationForm(ActionEvent e) {
         Professor p;
         String ID = professorIDRegistration.getText();
+        String password = professorPasswordRegistration.getText();
         String firstName = professorFirstNameRegistration.getText();
         String lastName = professorLastNameRegistration.getText();
         String address = professorAddressRegistration.getText();
@@ -43,18 +47,12 @@ public class ProfessorRegistrationController implements Initializable {
         int departmentID = Department.valueOf(professorDepartmentRegistration.getValue()).getDepartmentID(); // parse string to Department Enum, get ID
 
         try {
-            p = new Professor(ID, firstName, lastName, address, phone, email, departmentID);
+            p = new Professor(ID, password, firstName, lastName, address, phone, email, departmentID);
         } catch(Exception ex) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Incorrect Input");
-            alert.setHeaderText("You've entered incorrect input, see below for more information.");
-            alert.setContentText(ex.getMessage());
-
-            if(alert.showAndWait().get() == ButtonType.OK) {
-                Stage stage = (Stage)professorRegistrationForm.getScene().getWindow();
-                stage.close();
-            }
-        } finally {
+            triggerAlert("Incorrect Input", "You've entered incorrect input, see below for more information.", ex);
+            return; // user input is incorrect, keep old inputs and prompt user to reenter or fix info
+        }
+        finally {
             professorIDRegistration.setText("");
             professorFirstNameRegistration.setText("");
             professorLastNameRegistration.setText("");
@@ -62,11 +60,33 @@ public class ProfessorRegistrationController implements Initializable {
             professorPhoneRegistration.setText("");
             professorEmailRegistration.setText("");
         }
+
+        try {
+            insertNewProfessor(p);
+        } catch(Exception ex) {
+            triggerAlert("", "", ex);
+        }
+    }
+
+    private void triggerAlert(String title, String message, Exception ex) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(message);
+        alert.setContentText(ex.getMessage());
+
+        if(alert.showAndWait().get() == ButtonType.OK) {
+            Stage stage = (Stage)professorRegistrationForm.getScene().getWindow();
+            stage.close();
+        }
     }
 
     public void revertToProfessorLogin(ActionEvent e) {
         Controller c = new Controller();
         c.switchToProfessorLogin(e);
+    }
+
+    private void insertNewProfessor(Professor p) {
+        SQLController.insertPerson(Table.PROFESSOR, p);
     }
 
     @Override
