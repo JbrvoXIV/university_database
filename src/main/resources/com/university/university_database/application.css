@@ -21,3 +21,8 @@ label {
     -fx-font-size: 15px;
     -fx-font-weight: bold;
 }
+
+.button {
+    -fx-min-height: 25px;
+    -fx-pref-width: 70px;
+}

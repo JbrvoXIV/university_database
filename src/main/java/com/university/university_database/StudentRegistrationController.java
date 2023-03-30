@@ -11,7 +11,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import java.time.LocalDate;
-import java.util.IllegalFormatException;
 
 public class StudentRegistrationController {
 
@@ -33,7 +32,7 @@ public class StudentRegistrationController {
     private BorderPane studentRegistrationForm;
 
     public void submitStudentRegistrationForm(ActionEvent e) {
-        Student s = null;
+        Student s;
         String ID = studentIDRegistration.getText();
         String firstName = studentFirstNameRegistration.getText();
         String lastName = studentLastNameRegistration.getText();
@@ -50,7 +49,7 @@ public class StudentRegistrationController {
             alert.setHeaderText("You've entered incorrect input, see below for more information.");
             alert.setContentText(ex.getMessage());
 
-            if(alert.showAndWait().isPresent() && alert.showAndWait().get() == ButtonType.OK) {
+            if(alert.showAndWait().get() == ButtonType.OK) {
                 Stage stage = (Stage)studentRegistrationForm.getScene().getWindow();
                 stage.close();
             }
@@ -63,6 +62,11 @@ public class StudentRegistrationController {
             studentEmailRegistration.setText("");
             studentDOBRegistration.setValue(null);
         }
+    }
+
+    public void revertToStudentLogin(ActionEvent e) {
+        Controller c = new Controller();
+        c.switchToStudentLogin(e);
     }
 
 }

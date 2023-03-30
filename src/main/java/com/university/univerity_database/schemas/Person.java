@@ -2,7 +2,7 @@ package com.university.univerity_database.schemas;
 
 import java.time.LocalDate;
 
-public class Person {
+public abstract class Person {
 
     protected int ID;
     protected String firstName;
@@ -10,10 +10,9 @@ public class Person {
     protected String address;
     protected String phone;
     protected String email;
-    protected LocalDate dob;
 
-    public Person(String ID, String firstName, String lastName, String address, String phone, String email, LocalDate dob) {
-        IllegalArgumentException e = validateInputs(ID, firstName, lastName, address, phone, email, dob);
+    public Person(String ID, String firstName, String lastName, String address, String phone, String email) {
+        IllegalArgumentException e = validateInputs(ID, firstName, lastName, address, phone, email);
 
         if(e != null) {
             throw e; // error was found in inputs
@@ -25,10 +24,9 @@ public class Person {
         this.address = address;
         this.phone = phone;
         this.email = email;
-        this.dob = dob;
     }
 
-    private IllegalArgumentException validateInputs(String ID, String firstName, String lastName, String address, String phone, String email, LocalDate dob) {
+    private IllegalArgumentException validateInputs(String ID, String firstName, String lastName, String address, String phone, String email) {
         if(!validateID(ID)) {
             return new IllegalArgumentException("The ID value you entered, " + ID + ", is incorrect! Please try again.");
         }
@@ -46,9 +44,6 @@ public class Person {
         }
         if(!validateEmail(email)) {
             return new IllegalArgumentException("The email, " + email + ", is not in a valid format! Please try again.");
-        }
-        if(!validateDOB(dob)) {
-            return new IllegalArgumentException("The date of birth, " + dob + ", is too old! Please try again.");
         }
         return null; // no errors found
     }
@@ -79,11 +74,6 @@ public class Person {
         return email.matches(emailValidationRegex);
     }
 
-    private boolean validateDOB(LocalDate dob) {
-        boolean isYoung = LocalDate.now().getYear() - dob.getYear() < 60; // young if less than 60
-        return isYoung;
-    }
-
     public int getID() {
         return ID;
     }
@@ -106,9 +96,5 @@ public class Person {
 
     public String getEmail() {
         return email;
-    }
-
-    public LocalDate getDob() {
-        return dob;
     }
 }
