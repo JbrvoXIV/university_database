@@ -1,4 +1,4 @@
-package com.university.univerity_database.schemas;
+package com.university.university_database.schemas;
 
 import java.time.LocalDate;
 
@@ -86,6 +86,10 @@ public abstract class Person {
 
     public int getID() {
         return ID;
+    }
+
+    public String getPassword() {
+        return password;
     }
 
     public String getFirstName() {

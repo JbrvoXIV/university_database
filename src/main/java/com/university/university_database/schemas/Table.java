@@ -1,4 +1,4 @@
-package com.university.univerity_database.schemas;
+package com.university.university_database.schemas;
 
 public enum Table {
     STUDENT("STUDENT"),

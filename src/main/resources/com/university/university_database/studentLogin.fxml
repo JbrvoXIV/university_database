@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@application.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.university.university_database.StudentController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@application.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.university.university_database.StudentLoginController">
    <left>
       <AnchorPane prefHeight="400.0" prefWidth="208.0" style="-fx-background-color: #e5e5e7; -fx-border-color: black; -fx-border-width: 0 2 0 0;" BorderPane.alignment="CENTER">
          <children>
@@ -22,7 +22,12 @@
                   <Font name="Courier New Bold" size="16.0" />
                </font>
             </Label>
-            <Button alignment="CENTER" layoutX="47.0" layoutY="251.0" mnemonicParsing="false" onAction="#switchToStudentRegisterForm" prefHeight="52.0" prefWidth="112.0" text="Register Now!" textAlignment="CENTER" wrapText="true">
+            <Button alignment="CENTER" layoutX="47.0" layoutY="251.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#switchToStudentRegisterForm" prefHeight="52.0" prefWidth="112.0" text="Register Now!" textAlignment="CENTER" wrapText="true">
+               <font>
+                  <Font name="Courier New" size="13.0" />
+               </font>
+            </Button>
+            <Button alignment="CENTER" layoutX="47.0" layoutY="311.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#revertToOriginalPage" prefHeight="52.0" prefWidth="112.0" text="Back" textAlignment="CENTER" wrapText="true">
                <font>
                   <Font name="Courier New" size="13.0" />
                </font>
@@ -38,8 +43,8 @@
                   <Font size="26.0" />
                </font>
             </Label>
-            <Label fx:id="studentLoginError" alignment="CENTER" layoutX="2.0" layoutY="103.0" prefHeight="29.0" prefWidth="391.0" textAlignment="CENTER" />
-            <Label alignment="CENTER" layoutX="18.0" layoutY="132.0" prefHeight="59.0" prefWidth="139.0" text="USERNAME:">
+            <Label fx:id="studentLoginMessage" alignment="CENTER" layoutX="2.0" layoutY="103.0" prefHeight="29.0" prefWidth="391.0" textAlignment="CENTER" />
+            <Label alignment="CENTER" layoutX="18.0" layoutY="132.0" prefHeight="59.0" prefWidth="139.0" text="ID:">
                <font>
                   <Font name="Courier New Bold" size="18.0" />
                </font>
@@ -51,7 +56,7 @@
             </Label>
             <TextField fx:id="studentUsernameField" layoutX="157.0" layoutY="150.0" prefHeight="24.0" prefWidth="187.0" />
             <PasswordField fx:id="studentPasswordField" layoutX="157.0" layoutY="209.0" prefHeight="24.0" prefWidth="187.0" />
-            <Button fx:id="studentLogin" alignment="CENTER" layoutX="187.0" layoutY="283.0" mnemonicParsing="false" onAction="#studentLogin" prefHeight="52.0" prefWidth="112.0" text="Login" textAlignment="CENTER" wrapText="true">
+            <Button alignment="CENTER" layoutX="187.0" layoutY="283.0" mnemonicParsing="false" onAction="#studentLogin" prefHeight="52.0" prefWidth="112.0" text="Login" textAlignment="CENTER" wrapText="true">
                <font>
                   <Font name="Courier New" size="13.0" />
                </font>

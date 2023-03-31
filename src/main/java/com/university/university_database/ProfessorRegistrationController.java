@@ -1,8 +1,8 @@
 package com.university.university_database;
 
-import com.university.univerity_database.schemas.Department;
-import com.university.univerity_database.schemas.Professor;
-import com.university.univerity_database.schemas.Table;
+import com.university.university_database.schemas.Department;
+import com.university.university_database.schemas.Professor;
+import com.university.university_database.schemas.Table;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -11,6 +11,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class ProfessorRegistrationController implements Initializable {
@@ -64,15 +65,18 @@ public class ProfessorRegistrationController implements Initializable {
         try {
             insertNewProfessor(p);
         } catch(Exception ex) {
-            triggerAlert("", "", ex);
+            triggerAlert("INSERT Failed", "The insert failed! See below for more details.", ex);
         }
     }
 
     private void triggerAlert(String title, String message, Exception ex) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
+        String exceptionName = ex.getClass().getSimpleName();
+        String exceptionMessage = ex.getMessage();
+
         alert.setTitle(title);
         alert.setHeaderText(message);
-        alert.setContentText(ex.getMessage());
+        alert.setContentText(exceptionName + ": " + exceptionMessage);
 
         if(alert.showAndWait().get() == ButtonType.OK) {
             Stage stage = (Stage)professorRegistrationForm.getScene().getWindow();
@@ -85,8 +89,8 @@ public class ProfessorRegistrationController implements Initializable {
         c.switchToProfessorLogin(e);
     }
 
-    private void insertNewProfessor(Professor p) {
-        SQLController.insertPerson(Table.PROFESSOR, p);
+    private void insertNewProfessor(Professor p) throws SQLException {
+        SQLController.insert(Table.PROFESSOR, p);
     }
 
     @Override

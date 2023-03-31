@@ -1,7 +1,7 @@
 package com.university.university_database;
 
-import com.university.univerity_database.schemas.Student;
-import com.university.univerity_database.schemas.Table;
+import com.university.university_database.schemas.Student;
+import com.university.university_database.schemas.Table;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -11,6 +11,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 
 public class StudentRegistrationController {
@@ -79,8 +80,8 @@ public class StudentRegistrationController {
         }
     }
 
-    private void insertNewStudent(Student s) {
-        SQLController.insertPerson(Table.STUDENT, s);
+    private void insertNewStudent(Student s) throws SQLException {
+        SQLController.insert(Table.STUDENT, s);
     }
 
     public void revertToStudentLogin(ActionEvent e) {

@@ -22,7 +22,7 @@ label {
     -fx-font-weight: bold;
 }
 
-.button {
+button {
     -fx-min-height: 25px;
     -fx-pref-width: 70px;
 }

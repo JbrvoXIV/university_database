@@ -1,6 +1,5 @@
-package com.university.univerity_database.schemas;
+package com.university.university_database.schemas;
 
-import java.time.LocalDate;
 import java.util.Arrays;
 
 public class Professor extends Person {

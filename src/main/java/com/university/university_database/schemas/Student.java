@@ -1,4 +1,4 @@
-package com.university.univerity_database.schemas;
+package com.university.university_database.schemas;
 
 import java.time.LocalDate;
 
@@ -20,6 +20,10 @@ public class Student extends Person {
         int age = LocalDate.now().getYear() - dob.getYear();
         boolean isOldEnough = age >= 18 && age <= 60 ; // young if less than 60
         return isOldEnough;
+    }
+
+    public LocalDate getDob() {
+        return dob;
     }
 
     @Override

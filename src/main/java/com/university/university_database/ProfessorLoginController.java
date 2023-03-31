@@ -13,7 +13,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-public class ProfessorController {
+public class ProfessorLoginController {
     @FXML
     private Label professorLoginError;
     @FXML
@@ -45,6 +45,15 @@ public class ProfessorController {
             stage.show();
         } catch(Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public void revertToOriginalPage(ActionEvent e) {
+        try {
+            stage = (Stage)(((Node)(e.getSource())).getScene().getWindow()); // grab current stage
+            new Main().start(stage); // call start, passing in current stage
+        } catch(Exception ex) {
+            ex.printStackTrace();
         }
     }
 }
