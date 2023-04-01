@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+
+<HBox styleClass="userPortal" stylesheets="@styles/userPortal.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <GridPane styleClass="userNavBar">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints fx:id="userPortalWelcome" maxHeight="285.0" minHeight="0.0" prefHeight="245.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="285.0" minHeight="40.0" prefHeight="149.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="80.0" minHeight="0.0" prefHeight="0.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="64.0" minHeight="0.0" prefHeight="64.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="98.0" minHeight="10.0" prefHeight="34.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" styleClass="userNavBarInfo">
+               <children>
+                  <Label alignment="CENTER" maxWidth="1.7976931348623157E308" text="Welcome!" />
+                  <Label />
+                  <Label maxWidth="1.7976931348623157E308" text="ID:">
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Label>
+                  <Label maxWidth="1.7976931348623157E308" text="Major:">
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Label>
+               </children>
+            </VBox>
+         </children>
+      </GridPane>
+   </children>
+</HBox>

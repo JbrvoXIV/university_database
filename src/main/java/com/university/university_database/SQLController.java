@@ -119,7 +119,7 @@ public class SQLController {
     /************************************SELECT**********************************************************/
 
     /* query student or professor login (WIP) */
-    public static Person queryLogin(Table table, String id, String password) throws SQLException {
+    public static Person queryLogin(Table table, String id, String password) throws SQLException, SQLSyntaxErrorException {
         Statement statement;
         ResultSet resultSet;
         String queryString;
