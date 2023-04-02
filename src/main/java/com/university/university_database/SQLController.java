@@ -10,9 +10,9 @@ import java.time.LocalDate;
 
 public class SQLController {
 
-    private final static String URL = "jdbc:mysql://localhost:3306/universityxyz_database";
-    private final static String USERNAME = "root";
-    private final static String PASSWORD = "password";
+    private final static String URI = System.getenv("MYSQL_URI");
+    private final static String USERNAME = System.getenv("MYSQL_USER");
+    private final static String PASSWORD = System.getenv("MYSQL_PASSWORD");
 
     public static Connection connection;
 
@@ -26,7 +26,7 @@ public class SQLController {
 
         try {
             connection = DriverManager.getConnection(
-                    URL,
+                    URI,
                     USERNAME,
                     PASSWORD);
         } catch(Exception e) {
