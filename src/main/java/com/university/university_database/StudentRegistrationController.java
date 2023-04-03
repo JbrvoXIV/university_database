@@ -1,13 +1,11 @@
 package com.university.university_database;
 
+import com.university.university_database.schemas.Department;
 import com.university.university_database.schemas.Student;
 import com.university.university_database.schemas.Table;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
@@ -20,6 +18,8 @@ public class StudentRegistrationController {
     private TextField studentIDRegistration;
     @FXML
     private TextField studentPasswordRegistration;
+    @FXML
+    private ChoiceBox<String> studentMajorRegistration;
     @FXML
     private TextField studentFirstNameRegistration;
     @FXML
@@ -39,6 +39,7 @@ public class StudentRegistrationController {
         Student s;
         String ID = studentIDRegistration.getText();
         String password = studentPasswordRegistration.getText();
+        int departmentID = Department.valueOf(studentMajorRegistration.getValue()).getDepartmentID(); // parse string to Department Enum, get ID
         String firstName = studentFirstNameRegistration.getText();
         String lastName = studentLastNameRegistration.getText();
         String address = studentAddressRegistration.getText();
@@ -47,7 +48,7 @@ public class StudentRegistrationController {
         LocalDate dob = studentDOBRegistration.getValue();
 
         try {
-            s = new Student(ID, password, firstName, lastName, address, phone, email, dob);
+            s = new Student(ID, password, departmentID, firstName, lastName, address, phone, email, dob);
         } catch(Exception ex) {
             triggerAlert("Incorrect Input", "You've entered incorrect input, see below for more information.", ex);
             return;
@@ -64,7 +65,7 @@ public class StudentRegistrationController {
         try {
             insertNewStudent(s);
         } catch(Exception ex) {
-            triggerAlert("", "", ex);
+            triggerAlert("INSERT Failed", "The insert failed! See below for more details.", ex);
         }
     }
 

@@ -6,13 +6,14 @@ public abstract class Person {
 
     protected int ID;
     protected String password;
+    protected int departmentID;
     protected String firstName;
     protected String lastName;
     protected String address;
     protected String phone;
     protected String email;
 
-    public Person(String ID, String password, String firstName, String lastName, String address, String phone, String email) {
+    public Person(String ID, String password, int departmentID, String firstName, String lastName, String address, String phone, String email) {
         IllegalArgumentException e = validateInputs(ID, password, firstName, lastName, address, phone, email);
 
         if(e != null) {
@@ -21,6 +22,7 @@ public abstract class Person {
 
         this.ID = Integer.parseInt(ID);
         this.password = password;
+        this.departmentID = departmentID;
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
@@ -110,5 +112,9 @@ public abstract class Person {
 
     public String getEmail() {
         return email;
+    }
+
+    public int getDepartmentID() {
+        return departmentID;
     }
 }

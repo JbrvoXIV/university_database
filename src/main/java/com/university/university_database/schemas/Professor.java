@@ -4,24 +4,8 @@ import java.util.Arrays;
 
 public class Professor extends Person {
 
-    private final int departmentID;
-
     public Professor(String ID, String password, String firstName, String lastName, String address, String phone, String email, int departmentID) {
-        super(ID, password, firstName, lastName, address, phone, email);
-
-        if(!validateDepartmentID(departmentID)) {
-            throw new IllegalArgumentException("The department ID is not a valid value! Please select correctly");
-        }
-
-        this.departmentID = departmentID;
-    }
-
-    private boolean validateDepartmentID(int departmentID) {
-        return Arrays.stream(Department.values()).anyMatch(d -> d.getDepartmentID() == departmentID); // departmentID has to be valid in Department Enum
-    }
-
-    public int getDepartmentID() {
-        return departmentID;
+        super(ID, password, departmentID, firstName, lastName, address, phone, email);
     }
 
     @Override

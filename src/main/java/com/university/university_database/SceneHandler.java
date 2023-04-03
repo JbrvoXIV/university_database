@@ -1,10 +1,10 @@
 package com.university.university_database;
 
 import com.university.university_database.schemas.Person;
+import com.university.university_database.schemas.Student;
 import com.university.university_database.schemas.Table;
 import javafx.animation.PauseTransition;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.net.URL;
+import java.sql.SQLException;
 import java.sql.SQLSyntaxErrorException;
 import java.util.Objects;
 
@@ -24,7 +25,9 @@ public class SceneHandler {
         STUDENT_LOGIN("studentLogin.fxml", "Student Login Page"),
         PROFESSOR_LOGIN("professorLogin.fxml", "Professor Login Page"),
         STUDENT_REGISTRATION("studentRegistration.fxml", "Student Registration Form"),
-        PROFESSOR_REGISTRATION("professorRegistration.fxml", "Professor Registration Form");
+        PROFESSOR_REGISTRATION("professorRegistration.fxml", "Professor Registration Form"),
+        STUDENT_PORTAL("studentPortal.fxml", "Student Portal"),
+        PROFESSOR_PORTAL("professorPortal.fxml", "Professor Portal");
 
         private final String file;
         private final String title;
@@ -71,13 +74,18 @@ public class SceneHandler {
          loadSceneHelper(Files.PROFESSOR_REGISTRATION.getFile(), Files.PROFESSOR_REGISTRATION.getTitle());
     }
 
-//    private static void loadUserInformation(Person p) {
-//        loadUserLoginScene(p);
-//        loadSceneHelper();
-//    }
+    private static void loadUserPortal(Person p, Label studentIDDisplay, Label studentMajorDisplay) throws SQLException {
+        loadSceneHelper(Files.STUDENT_PORTAL.getFile(), Files.STUDENT_PORTAL.getTitle());
+        loadUserPortalInfo(p, studentIDDisplay, studentMajorDisplay);
+    }
 
-    private static void loadUserLoginScene() {
+    private static void loadUserPortalInfo(Person p, Label studentIDDisplay, Label studentMajorDisplay) throws SQLException {
+        String idDisplayText = String.format("%s %s", studentIDDisplay.getText(), p.getID());
+        String department = SQLController.queryDepartment(p.getDepartmentID());
+        String majorDisplayText = String.format("%s %s", studentMajorDisplay.getText(), department);;
 
+        studentIDDisplay.setText(idDisplayText);
+        studentMajorDisplay.setText(majorDisplayText);
     }
 
      private static void loadSceneHelper(String file, String title) {
@@ -99,18 +107,44 @@ public class SceneHandler {
          String id = usernameField.getText();
          String password = passwordField.getText();
          PauseTransition pauseTransition = new PauseTransition(Duration.seconds(3));
+         Person p = null;
 
          messageLabel.setText(String.format("%s %s logging in...", id, password));
          try {
-             Person p = SQLController.queryLogin(table, id, password);
+             p = SQLController.queryLogin(table, id, password);
              pauseTransition.setOnFinished(event -> messageLabel.setText("LOGGED IN! Redirecting now..."));
-             //loadUserInformation(p);
          } catch(SQLSyntaxErrorException ex) {
              pauseTransition.setOnFinished(event -> messageLabel.setText("ID is not numerical, please try again"));
          } catch(Exception ex) {
              pauseTransition.setOnFinished(event -> messageLabel.setText(ex.getMessage()));
          } finally {
              pauseTransition.play();
+         }
+
+         pauseTransition.playFromStart();
+
+         try {
+             switch (table) {
+                 case STUDENT -> {
+                     StudentPortalController controller = new StudentPortalController();
+                     Student student = (Student) p;
+                     Person finalP = p; // considered final for sake of lambda expression variable argument
+                     pauseTransition.setOnFinished(event -> {
+                         try {
+                             loadUserPortal(finalP, controller.getStudentIDDisplay(), controller.getStudentMajorDisplay());
+                             controller.populateTable(student);
+                         } catch (SQLException e) {
+                             System.out.println(e.getMessage());;
+                         }
+                     });
+                 }
+                 case PROFESSOR -> {
+                     /* WIP */
+                 }
+             }
+             pauseTransition.play();
+         } catch(Exception ex) {
+             System.out.println(ex.getMessage());
          }
      }
 

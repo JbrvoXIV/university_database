@@ -6,8 +6,8 @@ public class Student extends Person {
 
     private LocalDate dob;
 
-    public Student(String ID, String password, String firstName, String lastName, String address, String phone, String email, LocalDate dob) {
-        super(ID, password, firstName, lastName, address, phone, email);
+    public Student(String ID, String password, int departmentID, String firstName, String lastName, String address, String phone, String email, LocalDate dob) {
+        super(ID, password, departmentID, firstName, lastName, address, phone, email);
 
         if(!validateDOB(dob)) {
             throw new IllegalArgumentException("The date of birth, " + dob + ", is too old! Please try again.");

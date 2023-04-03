@@ -150,6 +150,23 @@ public class SQLController {
         }
         return null;
     }
+
+    public static String queryDepartment(int departmentID) throws SQLException {
+        Statement statement;
+        ResultSet resultSet;
+        String queryString = String.format("SELECT * DEPARTMENT WHERE department_id = %d LIMIT 1", departmentID);
+
+        statement = connection.createStatement();
+        resultSet = statement.executeQuery(queryString);
+
+        String departmentName = resultSet.getString("department_name");
+
+        statement.close();
+        resultSet.close();
+
+        return departmentName;
+    }
+
     private static Date getLocalDateAsSQLDate(LocalDate date) {
         return Date.valueOf(date);
     }
