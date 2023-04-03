@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.URL?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
@@ -10,9 +11,9 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<BorderPane fx:id="studentRegistrationForm" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@styles/application.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.university.university_database.StudentRegistrationController">
+<BorderPane fx:id="studentRegistrationForm" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.university.university_database.StudentRegistrationController">
    <top>
-      <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="55.0" prefWidth="600.0" styleClass="title" text="Student Registration Form" textAlignment="CENTER" BorderPane.alignment="CENTER" />
+      <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="55.0" prefWidth="600.0" styleClass="registrationTitle" text="Student Registration Form" textAlignment="CENTER" BorderPane.alignment="CENTER" />
    </top>
    <center>
       <GridPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="279.0" prefWidth="471.0" BorderPane.alignment="CENTER">
@@ -58,4 +59,8 @@
          </children>
       </HBox>
    </bottom>
+   <stylesheets>
+      <URL value="@styles/application.css" />
+      <URL value="@styles/registrationForms.css" />
+   </stylesheets>
 </BorderPane>
