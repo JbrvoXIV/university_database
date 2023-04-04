@@ -1,9 +1,11 @@
 package com.university.university_database;
 
+import com.university.university_database.schemas.CurrentUser;
 import com.university.university_database.schemas.Person;
 import com.university.university_database.schemas.Student;
 import com.university.university_database.schemas.Table;
 import javafx.animation.PauseTransition;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -74,18 +76,21 @@ public class SceneHandler {
          loadSceneHelper(Files.PROFESSOR_REGISTRATION.getFile(), Files.PROFESSOR_REGISTRATION.getTitle());
     }
 
-    private static void loadUserPortal(Person p, Label studentIDDisplay, Label studentMajorDisplay) throws SQLException {
+    public static void loadStudentPortal() {
         loadSceneHelper(Files.STUDENT_PORTAL.getFile(), Files.STUDENT_PORTAL.getTitle());
-        loadUserPortalInfo(p, studentIDDisplay, studentMajorDisplay);
     }
 
-    private static void loadUserPortalInfo(Person p, Label studentIDDisplay, Label studentMajorDisplay) throws SQLException {
-        String idDisplayText = String.format("%s %s", studentIDDisplay.getText(), p.getID());
-        String department = SQLController.queryDepartment(p.getDepartmentID());
-        String majorDisplayText = String.format("%s %s", studentMajorDisplay.getText(), department);;
+    public static void loadProfessorPortal() {
+        loadSceneHelper(Files.PROFESSOR_PORTAL.getFile(), Files.PROFESSOR_PORTAL.getTitle());
+    }
 
-        studentIDDisplay.setText(idDisplayText);
-        studentMajorDisplay.setText(majorDisplayText);
+    public static void loadUserPortal(Person p, Label idDisplay, Label departmentDisplay) throws SQLException {
+        String idDisplayText = String.format("ID: %s", p.getID());
+        String department = SQLController.queryDepartment(p.getDepartmentID());
+        String majorDisplayText = String.format("Major: %s", department);;
+
+        idDisplay.setText(idDisplayText);
+        departmentDisplay.setText(majorDisplayText);
     }
 
      private static void loadSceneHelper(String file, String title) {
@@ -107,45 +112,27 @@ public class SceneHandler {
          String id = usernameField.getText();
          String password = passwordField.getText();
          PauseTransition pauseTransition = new PauseTransition(Duration.seconds(3));
-         Person p = null;
+         Person p;
 
          messageLabel.setText(String.format("%s %s logging in...", id, password));
          try {
              p = SQLController.queryLogin(table, id, password);
-             pauseTransition.setOnFinished(event -> messageLabel.setText("LOGGED IN! Redirecting now..."));
+             pauseTransition.setOnFinished(event -> messageLabel.setText("LOGGED IN!"));
+             CurrentUser.setUsername(id);
+             CurrentUser.setPassword(password);
          } catch(SQLSyntaxErrorException ex) {
              pauseTransition.setOnFinished(event -> messageLabel.setText("ID is not numerical, please try again"));
+             return;
          } catch(Exception ex) {
              pauseTransition.setOnFinished(event -> messageLabel.setText(ex.getMessage()));
+             return;
          } finally {
              pauseTransition.play();
          }
 
          pauseTransition.playFromStart();
-
-         try {
-             switch (table) {
-                 case STUDENT -> {
-                     StudentPortalController controller = new StudentPortalController();
-                     Student student = (Student) p;
-                     Person finalP = p; // considered final for sake of lambda expression variable argument
-                     pauseTransition.setOnFinished(event -> {
-                         try {
-                             loadUserPortal(finalP, controller.getStudentIDDisplay(), controller.getStudentMajorDisplay());
-                             controller.populateTable(student);
-                         } catch (SQLException e) {
-                             System.out.println(e.getMessage());;
-                         }
-                     });
-                 }
-                 case PROFESSOR -> {
-                     /* WIP */
-                 }
-             }
-             pauseTransition.play();
-         } catch(Exception ex) {
-             System.out.println(ex.getMessage());
-         }
+         pauseTransition.setOnFinished(event -> messageLabel.setText("Redirecting now..."));
+         pauseTransition.play();
      }
 
      private static void printErrorFileNull(String file) {

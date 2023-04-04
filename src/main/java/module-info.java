@@ -8,5 +8,8 @@ module com.university.university_database {
     requires java.sql;
 
     opens com.university.university_database to javafx.fxml;
+    opens com.university.university_database.schemas to javafx.fxml;
+
     exports com.university.university_database;
+    exports com.university.university_database.schemas;
 }

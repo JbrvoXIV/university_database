@@ -11,7 +11,7 @@ CREATE TABLE DEPARTMENT (
 CREATE TABLE STUDENT (
 	student_id INT UNIQUE NOT NULL,
     password VARCHAR(50) UNIQUE NOT NULL,
-    major_id INT NOT NULL,
+    major_id VARCHAR(7) NOT NULL,
     first_name VARCHAR(50) NOT NULL,
     last_name VARCHAR(50) NOT NULL,
     address VARCHAR(50) NOT NULL,

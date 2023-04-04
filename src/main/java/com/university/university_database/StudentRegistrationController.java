@@ -5,14 +5,17 @@ import com.university.university_database.schemas.Student;
 import com.university.university_database.schemas.Table;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
+import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ResourceBundle;
 
-public class StudentRegistrationController {
+public class StudentRegistrationController implements Initializable {
 
     @FXML
     private TextField studentIDRegistration;
@@ -90,4 +93,11 @@ public class StudentRegistrationController {
         c.switchToStudentLogin(e);
     }
 
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        Department[] departments = Department.values();
+        for(Department department : departments)
+            studentMajorRegistration.getItems().add(department.name());
+        studentMajorRegistration.setValue(departments[0].name()); // set default value to first department
+    }
 }

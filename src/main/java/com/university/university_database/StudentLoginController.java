@@ -24,6 +24,7 @@ public class StudentLoginController {
                 studentUsernameField,
                 studentPasswordField
         );
+        SceneHandler.loadStudentPortal();
     }
 
     public void switchToStudentRegisterForm(ActionEvent e) {

@@ -1,9 +1,8 @@
 package com.university.university_database;
 
-import com.university.university_database.schemas.Person;
-import com.university.university_database.schemas.Professor;
-import com.university.university_database.schemas.Student;
-import com.university.university_database.schemas.Table;
+import com.university.university_database.schemas.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -135,6 +134,7 @@ public class SQLController {
                     Student s = new Student(
                             resultSet.getString("student_id"),
                             password,
+                            resultSet.getInt("major_id"),
                             resultSet.getString("first_name"),
                             resultSet.getString("last_name"),
                             resultSet.getString("address"),
@@ -154,17 +154,61 @@ public class SQLController {
     public static String queryDepartment(int departmentID) throws SQLException {
         Statement statement;
         ResultSet resultSet;
-        String queryString = String.format("SELECT * DEPARTMENT WHERE department_id = %d LIMIT 1", departmentID);
+        String queryString = String.format("SELECT * FROM DEPARTMENT WHERE department_id = %d LIMIT 1", departmentID);
+        String departmentName = "";
 
         statement = connection.createStatement();
         resultSet = statement.executeQuery(queryString);
 
-        String departmentName = resultSet.getString("department_name");
+        if(resultSet.next()) {
+            departmentName = resultSet.getString("department_name");
+        }
 
         statement.close();
         resultSet.close();
 
         return departmentName;
+    }
+
+    public static ObservableList<Course> getCoursesForUser(Person p) throws SQLException {
+        ObservableList<Course> list = FXCollections.observableArrayList();
+        Statement statement;
+        ResultSet resultSet;
+        String queryString = String.format(
+                "SELECT *\n" +
+                "FROM COURSE\n" +
+                "JOIN ENROLLMENT ON COURSE.course_id = ENROLLMENT.course_id\n" +
+                "JOIN STUDENT ON ENROLLMENT.student_id = STUDENT.student_id\n" +
+                "WHERE STUDENT.student_id = %d"
+            , p.getID());
+
+        statement = connection.createStatement();
+        resultSet = statement.executeQuery(queryString);
+
+        while(resultSet.next()) {
+            String courseID = resultSet.getString("course_id");
+            int professorID = resultSet.getInt("professor_id");
+            String courseName = resultSet.getString("course_name");
+            String professorName = resultSet.getString("instructor_name");
+            Time startTime = resultSet.getTime("start_time");
+            Time endTime = resultSet.getTime("end_time");
+            String roomNumber = resultSet.getString("room_number");
+
+            list.add(new Course(
+                    courseID,
+                    professorID,
+                    courseName,
+                    professorName,
+                    startTime,
+                    endTime,
+                    roomNumber
+            ));
+        }
+
+        statement.close();
+        resultSet.close();
+
+        return list;
     }
 
     private static Date getLocalDateAsSQLDate(LocalDate date) {
