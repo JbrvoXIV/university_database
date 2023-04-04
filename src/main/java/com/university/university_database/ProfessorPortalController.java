@@ -8,7 +8,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -19,12 +18,12 @@ import java.sql.SQLException;
 import java.sql.Time;
 import java.util.ResourceBundle;
 
-public class StudentPortalController implements Initializable {
+public class ProfessorPortalController implements Initializable {
 
     @FXML
-    private Label studentIDDisplay;
+    private Label professorIDDisplay;
     @FXML
-    private Label studentMajorDisplay;
+    private Label professorMajorDisplay;
     @FXML
     private TableView<Course> courseTable;
     @FXML
@@ -37,16 +36,14 @@ public class StudentPortalController implements Initializable {
     private TableColumn<Course, Time> endTime;
     @FXML
     private TableColumn<Course, String> roomNumber;
-    @FXML
-    private TableColumn<Course, String> professorForCourse;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
-            Person p = SQLController.queryLogin(Table.STUDENT, CurrentUser.getUsername(), CurrentUser.getPassword());
+            Person p = SQLController.queryLogin(Table.PROFESSOR, CurrentUser.getUsername(), CurrentUser.getPassword());
             if(p == null)
                 throw new SQLException("User not found!");
-            SceneHandler.loadUserPortal(p, studentIDDisplay, studentMajorDisplay);
+            SceneHandler.loadUserPortal(p, professorIDDisplay, professorMajorDisplay);
             populateTable(p);
         } catch(Exception ex) {
             System.out.println(ex.getMessage());
@@ -57,7 +54,6 @@ public class StudentPortalController implements Initializable {
         startTime.setCellValueFactory(new PropertyValueFactory<>("startTime"));
         endTime.setCellValueFactory(new PropertyValueFactory<>("endTime"));
         roomNumber.setCellValueFactory(new PropertyValueFactory<>("roomNumber"));
-        professorForCourse.setCellValueFactory(new PropertyValueFactory<>("professorName"));
     }
 
     /* WIP */
@@ -76,12 +72,12 @@ public class StudentPortalController implements Initializable {
     public void logout(ActionEvent e) {
         CurrentUser.setUsername(null);
         CurrentUser.setPassword(null);
-        SceneHandler.loadStudentLogin();
+        SceneHandler.loadProfessorLogin();
     }
 
-    private void populateTable(Person student) {
+    private void populateTable(Person professor) {
         try {
-            ObservableList<Course> list = SQLController.getCoursesForUser(Table.STUDENT, student);
+            ObservableList<Course> list = SQLController.getCoursesForUser(Table.PROFESSOR, professor);
             courseTable.setItems(list);
             courseTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         } catch(Exception ex) {

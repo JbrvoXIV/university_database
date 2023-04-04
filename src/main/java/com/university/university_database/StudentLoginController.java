@@ -18,13 +18,15 @@ public class StudentLoginController {
     private PasswordField studentPasswordField;
 
     public void studentLogin(ActionEvent e) {
-        SceneHandler.handleLoginVerification(
+        boolean loggedIn = SceneHandler.handleLoginVerification(
                 Table.STUDENT,
                 studentLoginMessage,
                 studentUsernameField,
                 studentPasswordField
         );
-        SceneHandler.loadStudentPortal();
+        if(loggedIn) {
+            SceneHandler.loadStudentPortal();
+        }
     }
 
     public void switchToStudentRegisterForm(ActionEvent e) {

@@ -2,9 +2,9 @@
 
 <?import java.net.URL?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -51,7 +51,7 @@
             <Label alignment="CENTER" layoutX="10.0" layoutY="18.0" maxWidth="1.7976931348623157E308" prefHeight="19.0" prefWidth="107.0" styleClass="formLabel" text="Password" GridPane.rowIndex="1" />
             <TextField fx:id="studentPasswordRegistration" layoutX="149.0" layoutY="16.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="24.0" prefWidth="279.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <Label alignment="CENTER" layoutX="10.0" layoutY="202.0" maxWidth="1.7976931348623157E308" prefHeight="19.0" prefWidth="107.0" styleClass="formLabel" text="Major" GridPane.rowIndex="7" />
-            <ListView fx:id="studentMajorRegistration" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="22.0" prefWidth="279.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+            <ChoiceBox fx:id="studentMajorRegistration" prefHeight="26.0" prefWidth="278.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
          </children>
       </GridPane>
    </center>

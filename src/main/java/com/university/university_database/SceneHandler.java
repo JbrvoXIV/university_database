@@ -9,9 +9,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -85,9 +83,9 @@ public class SceneHandler {
     }
 
     public static void loadUserPortal(Person p, Label idDisplay, Label departmentDisplay) throws SQLException {
-        String idDisplayText = String.format("ID: %s", p.getID());
+        String idDisplayText = String.format("%s %s", idDisplay.getText(), p.getID());
         String department = SQLController.queryDepartment(p.getDepartmentID());
-        String majorDisplayText = String.format("Major: %s", department);;
+        String majorDisplayText = String.format("%s %s", departmentDisplay.getText(), department);;
 
         idDisplay.setText(idDisplayText);
         departmentDisplay.setText(majorDisplayText);
@@ -108,13 +106,13 @@ public class SceneHandler {
          }
      }
 
-     public static void handleLoginVerification(Table table, Label messageLabel, TextField usernameField, PasswordField passwordField) {
+     public static boolean handleLoginVerification(Table table, Label messageLabel, TextField usernameField, PasswordField passwordField) {
          String id = usernameField.getText();
          String password = passwordField.getText();
          PauseTransition pauseTransition = new PauseTransition(Duration.seconds(3));
          Person p;
 
-         messageLabel.setText(String.format("%s %s logging in...", id, password));
+         messageLabel.setText(String.format("%s logging in...", id));
          try {
              p = SQLController.queryLogin(table, id, password);
              pauseTransition.setOnFinished(event -> messageLabel.setText("LOGGED IN!"));
@@ -122,10 +120,12 @@ public class SceneHandler {
              CurrentUser.setPassword(password);
          } catch(SQLSyntaxErrorException ex) {
              pauseTransition.setOnFinished(event -> messageLabel.setText("ID is not numerical, please try again"));
-             return;
+             printExceptionMessage(ex);
+             return false;
          } catch(Exception ex) {
              pauseTransition.setOnFinished(event -> messageLabel.setText(ex.getMessage()));
-             return;
+             printExceptionMessage(ex);
+             return false;
          } finally {
              pauseTransition.play();
          }
@@ -133,7 +133,18 @@ public class SceneHandler {
          pauseTransition.playFromStart();
          pauseTransition.setOnFinished(event -> messageLabel.setText("Redirecting now..."));
          pauseTransition.play();
+
+         return true;
      }
+
+    public static void triggerAlert(String title, String message, Exception ex) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(message);
+        alert.setContentText(ex.getMessage());
+
+        alert.showAndWait();
+    }
 
      private static void printErrorFileNull(String file) {
          System.out.println("The file " + file + " does not exist!");

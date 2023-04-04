@@ -117,22 +117,37 @@ public class SQLController {
 
     /************************************SELECT**********************************************************/
 
-    /* query student or professor login (WIP) */
-    public static Person queryLogin(Table table, String id, String password) throws SQLException, SQLSyntaxErrorException {
+    public static boolean queryForUserIDCheck(Table table, Person p) throws SQLException {
+        String tableToQuery = table.getTable();
+        String idAttribute = tableToQuery.equals(Table.STUDENT.getTable()) ? "student_id" :"professor_id";
+        String queryString = String.format(
+                "SELECT %s FROM %s WHERE %s=%s", idAttribute, tableToQuery, idAttribute, p.getID()
+                );
         Statement statement;
         ResultSet resultSet;
-        String queryString;
-        switch(table) {
-            case STUDENT -> {
-                queryString = String.format("SELECT * FROM STUDENT WHERE student_id = %s LIMIT 1", id);
-                statement = connection.createStatement();
-                resultSet = statement.executeQuery(queryString);
-                if(resultSet.next()) {
-                    boolean passwordCorrect = password.equals(resultSet.getString("password"));
-                    if(!passwordCorrect)
-                        throw new SQLException("Password is incorrect! Please try again!");
-                    Student s = new Student(
-                            resultSet.getString("student_id"),
+
+        statement = connection.createStatement();
+        resultSet = statement.executeQuery(queryString);
+
+        return resultSet.next(); // user exists = true, otherwise = false;
+    }
+
+    public static Person queryLogin(Table table, String id, String password) throws SQLException, SQLSyntaxErrorException {
+        Person p = null;
+        String tableToQuery = table.getTable();
+        String idAttribute = tableToQuery.equals(Table.STUDENT.getTable()) ? "student_id" :"professor_id";
+        String queryString = String.format("SELECT * FROM %s WHERE %s = %s LIMIT 1", tableToQuery, idAttribute, id);
+        Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery(queryString);
+
+        if(resultSet.next()) {
+            boolean passwordCorrect = password.equals(resultSet.getString("password"));
+            if (!passwordCorrect)
+                throw new SQLException("Password is incorrect! Please try again!");
+            switch (table) {
+                case STUDENT ->
+                        p = new Student(
+                            id,
                             password,
                             resultSet.getInt("major_id"),
                             resultSet.getString("first_name"),
@@ -142,13 +157,23 @@ public class SQLController {
                             resultSet.getString("email"),
                             resultSet.getDate("dob").toLocalDate()
                     );
-                    return s;
-                } else { // query returns nothing
-                    throw new SQLException("User does not exist! Please register.");
-                }
+                case PROFESSOR ->
+                    p = new Professor(
+                            id,
+                            password,
+                            resultSet.getString("first_name"),
+                            resultSet.getString("last_name"),
+                            resultSet.getString("address"),
+                            resultSet.getString("phone_number"),
+                            resultSet.getString("email"),
+                            resultSet.getInt("department_id")
+                    );
             }
+        } else { // query returns nothing
+            throw new SQLException("User does not exist! Please register.");
         }
-        return null;
+
+        return p;
     }
 
     public static String queryDepartment(int departmentID) throws SQLException {
@@ -170,17 +195,22 @@ public class SQLController {
         return departmentName;
     }
 
-    public static ObservableList<Course> getCoursesForUser(Person p) throws SQLException {
+    public static ObservableList<Course> getCoursesForUser(Table table, Person p) throws SQLException {
         ObservableList<Course> list = FXCollections.observableArrayList();
         Statement statement;
         ResultSet resultSet;
-        String queryString = String.format(
-                "SELECT *\n" +
-                "FROM COURSE\n" +
-                "JOIN ENROLLMENT ON COURSE.course_id = ENROLLMENT.course_id\n" +
-                "JOIN STUDENT ON ENROLLMENT.student_id = STUDENT.student_id\n" +
-                "WHERE STUDENT.student_id = %d"
-            , p.getID());
+        String queryString = "";
+        if(table == Table.STUDENT) {
+            queryString = String.format(
+                    "SELECT *\n" +
+                            "FROM COURSE\n" +
+                            "JOIN ENROLLMENT ON COURSE.course_id = ENROLLMENT.course_id\n" +
+                            "JOIN STUDENT ON ENROLLMENT.student_id = STUDENT.student_id\n" +
+                            "WHERE STUDENT.student_id = %d"
+                    , p.getID());
+        } else {
+            queryString = String.format("SELECT * FROM COURSE WHERE professor_id=%d", p.getID());
+        }
 
         statement = connection.createStatement();
         resultSet = statement.executeQuery(queryString);

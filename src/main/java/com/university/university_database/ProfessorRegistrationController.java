@@ -1,6 +1,7 @@
 package com.university.university_database;
 
 import com.university.university_database.schemas.Department;
+import com.university.university_database.schemas.Person;
 import com.university.university_database.schemas.Professor;
 import com.university.university_database.schemas.Table;
 import javafx.event.ActionEvent;
@@ -12,6 +13,7 @@ import javafx.stage.Stage;
 
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.InputMismatchException;
 import java.util.ResourceBundle;
 
 public class ProfessorRegistrationController implements Initializable {
@@ -37,7 +39,7 @@ public class ProfessorRegistrationController implements Initializable {
 
 
     public void submitProfessorRegistrationForm(ActionEvent e) {
-        Professor p;
+        Professor p = null;
         String ID = professorIDRegistration.getText();
         String password = professorPasswordRegistration.getText();
         String firstName = professorFirstNameRegistration.getText();
@@ -49,38 +51,20 @@ public class ProfessorRegistrationController implements Initializable {
 
         try {
             p = new Professor(ID, password, firstName, lastName, address, phone, email, departmentID);
+            if(SQLController.queryForUserIDCheck(Table.PROFESSOR, p))
+                throw new InputMismatchException("User with ID " + ID + " already exists, cannot create new user.");
+        } catch(InputMismatchException ex) {
+            SceneHandler.triggerAlert("Error", "The user ID already exists.", ex);
+            return;
         } catch(Exception ex) {
-            triggerAlert("Incorrect Input", "You've entered incorrect input, see below for more information.", ex);
+            SceneHandler.triggerAlert("Incorrect Input", "You've entered incorrect input, see below for more information.", ex);
             return; // user input is incorrect, keep old inputs and prompt user to reenter or fix info
-        }
-        finally {
-            professorIDRegistration.setText("");
-            professorFirstNameRegistration.setText("");
-            professorLastNameRegistration.setText("");
-            professorAddressRegistration.setText("");
-            professorPhoneRegistration.setText("");
-            professorEmailRegistration.setText("");
         }
 
         try {
             insertNewProfessor(p);
         } catch(Exception ex) {
-            triggerAlert("INSERT Failed", "The insert failed! See below for more details.", ex);
-        }
-    }
-
-    private void triggerAlert(String title, String message, Exception ex) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        String exceptionName = ex.getClass().getSimpleName();
-        String exceptionMessage = ex.getMessage();
-
-        alert.setTitle(title);
-        alert.setHeaderText(message);
-        alert.setContentText(exceptionName + ": " + exceptionMessage);
-
-        if(alert.showAndWait().get() == ButtonType.OK) {
-            Stage stage = (Stage)professorRegistrationForm.getScene().getWindow();
-            stage.close();
+            SceneHandler.triggerAlert("INSERT Failed", "The insert failed! See below for more details.", ex);
         }
     }
 

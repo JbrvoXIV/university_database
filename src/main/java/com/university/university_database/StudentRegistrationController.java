@@ -1,6 +1,7 @@
 package com.university.university_database;
 
 import com.university.university_database.schemas.Department;
+import com.university.university_database.schemas.Person;
 import com.university.university_database.schemas.Student;
 import com.university.university_database.schemas.Table;
 import javafx.event.ActionEvent;
@@ -13,6 +14,7 @@ import javafx.stage.Stage;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.InputMismatchException;
 import java.util.ResourceBundle;
 
 public class StudentRegistrationController implements Initializable {
@@ -39,7 +41,7 @@ public class StudentRegistrationController implements Initializable {
     private BorderPane studentRegistrationForm;
 
     public void submitStudentRegistrationForm(ActionEvent e) {
-        Student s;
+        Student s = null;
         String ID = studentIDRegistration.getText();
         String password = studentPasswordRegistration.getText();
         int departmentID = Department.valueOf(studentMajorRegistration.getValue()).getDepartmentID(); // parse string to Department Enum, get ID
@@ -52,35 +54,20 @@ public class StudentRegistrationController implements Initializable {
 
         try {
             s = new Student(ID, password, departmentID, firstName, lastName, address, phone, email, dob);
-        } catch(Exception ex) {
-            triggerAlert("Incorrect Input", "You've entered incorrect input, see below for more information.", ex);
+            if(SQLController.queryForUserIDCheck(Table.STUDENT, s))
+                throw new InputMismatchException("User with ID " + ID + " already exists, cannot create new user.");
+        } catch(InputMismatchException ex) {
+            SceneHandler.triggerAlert("Error", "The user ID already exists.", ex);
             return;
-        } finally {
-            studentIDRegistration.setText("");
-            studentFirstNameRegistration.setText("");
-            studentLastNameRegistration.setText("");
-            studentAddressRegistration.setText("");
-            studentPhoneRegistration.setText("");
-            studentEmailRegistration.setText("");
-            studentDOBRegistration.setValue(null);
+        } catch(Exception ex) {
+            SceneHandler.triggerAlert("Incorrect Input", "You've entered incorrect input, see below for more information.", ex);
+            return;
         }
 
         try {
             insertNewStudent(s);
         } catch(Exception ex) {
-            triggerAlert("INSERT Failed", "The insert failed! See below for more details.", ex);
-        }
-    }
-
-    private void triggerAlert(String title, String message, Exception ex) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(message);
-        alert.setContentText(ex.getMessage());
-
-        if(alert.showAndWait().get() == ButtonType.OK) {
-            Stage stage = (Stage)studentRegistrationForm.getScene().getWindow();
-            stage.close();
+            SceneHandler.triggerAlert("INSERT Failed", "The insert failed! See below for more details.", ex);
         }
     }
 

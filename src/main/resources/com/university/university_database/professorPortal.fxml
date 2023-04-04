@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<HBox styleClass="userPortal" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.university.university_database.StudentPortalController">
+<HBox styleClass="userPortal" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.university.university_database.ProfessorPortalController">
    <children>
       <GridPane styleClass="userNavBar">
         <columnConstraints>
@@ -29,7 +29,7 @@
                <children>
                   <Label alignment="CENTER" maxWidth="1.7976931348623157E308" text="Welcome!" />
                   <Label />
-                  <Label fx:id="studentIDDisplay" maxWidth="1.7976931348623157E308" text="ID:">
+                  <Label fx:id="professorIDDisplay" maxWidth="1.7976931348623157E308" text="ID:">
                      <padding>
                         <Insets left="10.0" />
                      </padding>
@@ -37,7 +37,7 @@
                         <Font size="15.0" />
                      </font>
                   </Label>
-                  <Label fx:id="studentMajorDisplay" maxWidth="1.7976931348623157E308" text="Major:" wrapText="true">
+                  <Label fx:id="professorMajorDisplay" maxWidth="1.7976931348623157E308" text="Department:" wrapText="true">
                      <padding>
                         <Insets left="10.0" />
                      </padding>
@@ -68,7 +68,6 @@
             <TableColumn fx:id="startTime" prefWidth="75.0" text="Start Time" />
             <TableColumn fx:id="endTime" prefWidth="75.0" text="End Time" />
             <TableColumn fx:id="roomNumber" prefWidth="75.0" text="Room Number" />
-            <TableColumn fx:id="professorForCourse" prefWidth="75.0" text="Professor" />
         </columns>
       </TableView>
    </children>

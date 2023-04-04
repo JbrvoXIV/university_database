@@ -16,12 +16,15 @@ public class ProfessorLoginController {
     private PasswordField professorPasswordField;
 
     public void professorLogin(ActionEvent e) {
-        SceneHandler.handleLoginVerification(
+        boolean loggedIn = SceneHandler.handleLoginVerification(
                 Table.PROFESSOR,
                 professorLoginMessage,
                 professorUsernameField,
                 professorPasswordField
         );
+        if(loggedIn) {
+            SceneHandler.loadProfessorPortal();
+        }
     }
 
     public void switchToProfessorRegisterForm(ActionEvent event) {
