@@ -42,8 +42,10 @@ public class StudentPortalController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        String userID = String.valueOf(CurrentUser.getUser().getID());
+        String userPassword = CurrentUser.getUser().getPassword();
         try {
-            Person p = SQLController.queryLogin(Table.STUDENT, CurrentUser.getUsername(), CurrentUser.getPassword());
+            Person p = SQLController.queryLogin(Table.STUDENT, userID, userPassword);
             if(p == null)
                 throw new SQLException("User not found!");
             SceneHandler.loadUserPortal(p, studentIDDisplay, studentMajorDisplay);
@@ -60,8 +62,8 @@ public class StudentPortalController implements Initializable {
         professorForCourse.setCellValueFactory(new PropertyValueFactory<>("professorName"));
     }
 
-    /* WIP */
-    public void addClass(ActionEvent e) {
+    public void switchToAddClassForm(ActionEvent e) {
+        SceneHandler.loadAddClassForm(Table.STUDENT);
     }
 
     /* WIP */
@@ -74,8 +76,7 @@ public class StudentPortalController implements Initializable {
 
     /* WIP */
     public void logout(ActionEvent e) {
-        CurrentUser.setUsername(null);
-        CurrentUser.setPassword(null);
+        CurrentUser.setUser(null);
         SceneHandler.loadStudentLogin();
     }
 

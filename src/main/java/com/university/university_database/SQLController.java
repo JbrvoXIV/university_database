@@ -173,6 +173,9 @@ public class SQLController {
             throw new SQLException("User does not exist! Please register.");
         }
 
+        statement.close();
+        resultSet.close();
+
         return p;
     }
 
@@ -245,4 +248,29 @@ public class SQLController {
         return Date.valueOf(date);
     }
 
+    /* WIP */
+    public static ObservableList<Course> getAvailableCoursesForUser(Table userType) throws SQLException {
+        ObservableList<Course> list = FXCollections.observableArrayList();
+        Statement statement = connection.createStatement();
+        ResultSet resultSet;
+        if(userType == Table.STUDENT) {
+            int studentID = CurrentUser.getUser().getID();
+            int majorID = CurrentUser.getUser().getDepartmentID();
+            String queryString = String.format(
+                    "SELECT *\n" +
+                    "FROM COURSE\n" +
+                    "JOIN ENROLLMENT ON COURSE.course_id = ENROLLMENT.course_id\n" +
+                    "JOIN STUDENT ON ENROLLMENT.student_id = STUDENT.student_id\n" +
+                    "WHERE COURSE.department_id = STUDENT.major_id\n" +
+                    "AND ENROLLMENT.student_id <> STUDENT.student_id");
+        } else {
+            int professorID = CurrentUser.getUser().getID();
+            int departmentID = CurrentUser.getUser().getDepartmentID();
+            String queryString = String.format(
+                    "SELECT * FROM COURSE\n" +
+                            "WHERE department_id = %d\n" +
+                            "AND professor_id <> %d", departmentID, professorID);
+        }
+        return null;
+    }
 }

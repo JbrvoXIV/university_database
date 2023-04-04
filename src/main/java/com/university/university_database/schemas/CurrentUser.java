@@ -1,22 +1,13 @@
 package com.university.university_database.schemas;
 
 public class CurrentUser {
-    private static String username;
-    private static String password;
+    private static Person user;
 
-    public static String getUsername() {
-        return username;
+    public static Person getUser() {
+        return user;
     }
 
-    public static void setUsername(String username) {
-        CurrentUser.username = username;
-    }
-
-    public static String getPassword() {
-        return password;
-    }
-
-    public static void setPassword(String password) {
-        CurrentUser.password = password;
+    public static void setUser(Person user) {
+        CurrentUser.user = user;
     }
 }

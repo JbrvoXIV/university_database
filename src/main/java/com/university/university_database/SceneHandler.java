@@ -27,7 +27,8 @@ public class SceneHandler {
         STUDENT_REGISTRATION("studentRegistration.fxml", "Student Registration Form"),
         PROFESSOR_REGISTRATION("professorRegistration.fxml", "Professor Registration Form"),
         STUDENT_PORTAL("studentPortal.fxml", "Student Portal"),
-        PROFESSOR_PORTAL("professorPortal.fxml", "Professor Portal");
+        PROFESSOR_PORTAL("professorPortal.fxml", "Professor Portal"),
+        ADD_CLASS_FORM("addClassForm.fxml", "Form");
 
         private final String file;
         private final String title;
@@ -82,6 +83,11 @@ public class SceneHandler {
         loadSceneHelper(Files.PROFESSOR_PORTAL.getFile(), Files.PROFESSOR_PORTAL.getTitle());
     }
 
+    public static void loadAddClassForm(Table table) {
+        AddClassForm.setUserType(table);
+        loadSceneHelper(Files.ADD_CLASS_FORM.getFile(), Files.ADD_CLASS_FORM.getTitle());
+    }
+
     public static void loadUserPortal(Person p, Label idDisplay, Label departmentDisplay) throws SQLException {
         String idDisplayText = String.format("%s %s", idDisplay.getText(), p.getID());
         String department = SQLController.queryDepartment(p.getDepartmentID());
@@ -111,13 +117,9 @@ public class SceneHandler {
          String password = passwordField.getText();
          PauseTransition pauseTransition = new PauseTransition(Duration.seconds(3));
          Person p;
-
-         messageLabel.setText(String.format("%s logging in...", id));
          try {
              p = SQLController.queryLogin(table, id, password);
-             pauseTransition.setOnFinished(event -> messageLabel.setText("LOGGED IN!"));
-             CurrentUser.setUsername(id);
-             CurrentUser.setPassword(password);
+             CurrentUser.setUser(p);
          } catch(SQLSyntaxErrorException ex) {
              pauseTransition.setOnFinished(event -> messageLabel.setText("ID is not numerical, please try again"));
              printExceptionMessage(ex);
@@ -129,11 +131,6 @@ public class SceneHandler {
          } finally {
              pauseTransition.play();
          }
-
-         pauseTransition.playFromStart();
-         pauseTransition.setOnFinished(event -> messageLabel.setText("Redirecting now..."));
-         pauseTransition.play();
-
          return true;
      }
 

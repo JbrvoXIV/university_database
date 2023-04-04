@@ -39,8 +39,10 @@ public class ProfessorPortalController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        String userID = String.valueOf(CurrentUser.getUser().getID());
+        String userPassword = CurrentUser.getUser().getPassword();
         try {
-            Person p = SQLController.queryLogin(Table.PROFESSOR, CurrentUser.getUsername(), CurrentUser.getPassword());
+            Person p = SQLController.queryLogin(Table.PROFESSOR, userID, userPassword);
             if(p == null)
                 throw new SQLException("User not found!");
             SceneHandler.loadUserPortal(p, professorIDDisplay, professorMajorDisplay);
@@ -70,8 +72,7 @@ public class ProfessorPortalController implements Initializable {
 
     /* WIP */
     public void logout(ActionEvent e) {
-        CurrentUser.setUsername(null);
-        CurrentUser.setPassword(null);
+        CurrentUser.setUser(null);
         SceneHandler.loadProfessorLogin();
     }
 

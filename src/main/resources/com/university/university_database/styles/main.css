@@ -10,3 +10,8 @@
 	-fx-pref-height: 40px;
 	-fx-pref-width: 90px;
 }
+
+.mainTitle {
+	-fx-font-size: 20px;
+	-fx-alignment: center;
+}

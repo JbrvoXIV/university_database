@@ -1,0 +1,5 @@
+1. Register Now! button does not redirect to registerForm for Students. [FIXED]
+2. User Authentication is not working, anybody can login regardless if user exists. [FIXED]
+3. Fix text-wrap for table view cells. [LEAVING AS IS]
+4. Fix user ID duplicate in user registration form. [FIXED]
+5. Work on all 4 buttons of portal form.[WIP]
