@@ -1,0 +1,47 @@
+.root {
+	-fx-pref-width: 400px;
+}
+
+.text-field {
+	-fx-pref-width: 150px;
+}
+
+.list-view {
+	-fx-pref-width: 400px;
+}
+
+#classesForDepartmentLabel {
+	-fx-pref-width: 400px;
+	-fx-alignment: center;
+}
+
+.mainTitle {
+	-fx-pref-width: 400px;
+	-fx-pref-height: 80px;
+	-fx-background-color:
+       -fx-shadow-highlight-color, 
+       -fx-outer-border, 
+       -fx-inner-border, 
+       -fx-body-color;
+  -fx-background-insets: 0 0 -1 0, 0, 1, 2;
+  -fx-background-radius: 3px, 3px, 2px, 1px;
+}
+
+.table-view {
+	-fx-pref-width: 400px;
+}
+
+.courseTable {
+    -fx-pref-width: inherit;
+    -fx-fixed-cell-size: 50px;
+}
+
+.table-view .column-header-background .label {
+    -fx-font-size: 8pt;
+}
+
+.table-view .table-cell {
+    -fx-cell-size-type: ROWS;
+    -fx-cell-size: 50px; /* Set the height of each row */
+    -fx-wrap-text: true; /* Wrap text in each cell */
+}
