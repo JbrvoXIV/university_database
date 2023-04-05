@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@styles/application.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.university.university_database.ProfessorLoginController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@styles/main.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.university.university_database.ProfessorLoginController">
     <left>
         <AnchorPane prefHeight="400.0" prefWidth="208.0" style="-fx-background-color: #e5e5e7; -fx-border-color: black; -fx-border-width: 0 2 0 0;" BorderPane.alignment="CENTER">
             <children>
@@ -38,7 +38,7 @@
     <right>
         <AnchorPane prefHeight="400.0" prefWidth="393.0" BorderPane.alignment="CENTER">
             <children>
-                <Label alignment="CENTER" layoutY="24.0" prefHeight="31.0" prefWidth="393.0" text="University XYZ">
+                <Label alignment="CENTER" layoutY="24.0" prefHeight="31.0" prefWidth="393.0" styleClass="mainTitle" text="University XYZ">
                     <font>
                         <Font size="26.0" />
                     </font>

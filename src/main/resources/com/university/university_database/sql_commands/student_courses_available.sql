@@ -1,0 +1,15 @@
+USE universityxyz_database;
+
+# SELECTING COURSES AVAILABLE FOR STUDENT'S WITH THE SPECIFIED MAJOR THAT HAVEN'T SELECTED SAID COURSES YET
+SELECT *
+FROM COURSE
+WHERE department_id = (
+    SELECT major_id
+    FROM STUDENT
+    WHERE student_id = 123456
+)
+AND course_id NOT IN (
+    SELECT course_id
+    FROM ENROLLMENT
+    WHERE student_id = 123456
+);

@@ -15,6 +15,5 @@
    </children>
    <stylesheets>
       <URL value="@styles/main.css" />
-      <URL value="@styles/application.css" />
    </stylesheets>
 </AnchorPane>

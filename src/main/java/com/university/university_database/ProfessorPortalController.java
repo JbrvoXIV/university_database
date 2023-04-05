@@ -59,7 +59,8 @@ public class ProfessorPortalController implements Initializable {
     }
 
     /* WIP */
-    public void addClass(ActionEvent e) {
+    public void switchToAddClassForm(ActionEvent e) {
+        SceneHandler.loadAddClassForm(Table.PROFESSOR);
     }
 
     /* WIP */

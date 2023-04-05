@@ -49,7 +49,7 @@
             </VBox>
             <HBox prefHeight="126.0" prefWidth="200.0" styleClass="portalButtonHBox" GridPane.rowIndex="1">
                <children>
-                  <Button mnemonicParsing="false" text="Add a Class" textAlignment="CENTER" />
+                  <Button mnemonicParsing="false" onAction="#switchToAddClassForm" text="Add a Class" textAlignment="CENTER" />
                   <Button mnemonicParsing="false" text="Remove a Class" />
                </children>
             </HBox>

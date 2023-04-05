@@ -6,6 +6,8 @@ import javafx.collections.ObservableList;
 
 import java.sql.*;
 import java.time.LocalDate;
+import java.util.InputMismatchException;
+import java.util.NoSuchElementException;
 
 public class SQLController {
 
@@ -251,26 +253,56 @@ public class SQLController {
     /* WIP */
     public static ObservableList<Course> getAvailableCoursesForUser(Table userType) throws SQLException {
         ObservableList<Course> list = FXCollections.observableArrayList();
-        Statement statement = connection.createStatement();
+        PreparedStatement preparedStatement;
         ResultSet resultSet;
         if(userType == Table.STUDENT) {
             int studentID = CurrentUser.getUser().getID();
-            int majorID = CurrentUser.getUser().getDepartmentID();
-            String queryString = String.format(
-                    "SELECT *\n" +
+            String queryString = "SELECT *\n" +
                     "FROM COURSE\n" +
-                    "JOIN ENROLLMENT ON COURSE.course_id = ENROLLMENT.course_id\n" +
-                    "JOIN STUDENT ON ENROLLMENT.student_id = STUDENT.student_id\n" +
-                    "WHERE COURSE.department_id = STUDENT.major_id\n" +
-                    "AND ENROLLMENT.student_id <> STUDENT.student_id");
+                    "WHERE department_id = (\n" +
+                    "    SELECT major_id\n" +
+                    "    FROM STUDENT\n" +
+                    "    WHERE student_id = ?\n" +
+                    ")\n" +
+                    "AND course_id NOT IN (\n" +
+                    "    SELECT course_id\n" +
+                    "    FROM ENROLLMENT\n" +
+                    "    WHERE student_id = ?\n" +
+                    ")";
+            preparedStatement = connection.prepareStatement(queryString);
+            preparedStatement.setInt(1, studentID);
+            preparedStatement.setInt(2, studentID);
         } else {
             int professorID = CurrentUser.getUser().getID();
             int departmentID = CurrentUser.getUser().getDepartmentID();
-            String queryString = String.format(
-                    "SELECT * FROM COURSE\n" +
-                            "WHERE department_id = %d\n" +
-                            "AND professor_id <> %d", departmentID, professorID);
+            String queryString = "SELECT * FROM COURSE\nWHERE department_id = ?\nAND professor_id <> ?";
+            preparedStatement = connection.prepareStatement(queryString);
+            preparedStatement.setInt(1, departmentID);
+            preparedStatement.setInt(2, professorID);
         }
-        return null;
+
+        resultSet = preparedStatement.executeQuery();
+
+        if(!resultSet.next()) {
+            SceneHandler.triggerAlert(
+                    "No Results Found!",
+                    "Please refer to the description for more information.",
+                    new NoSuchElementException("There are no classes available for you or you've already maxed out class list.")
+                    );
+            return null;
+        }
+
+        while(resultSet.next()) {
+            list.add(new Course(
+                    resultSet.getString("course_id"),
+                    resultSet.getInt("professor_id"),
+                    resultSet.getString("course_name"),
+                    resultSet.getString("instructor_name"),
+                    resultSet.getTime("start_time"),
+                    resultSet.getTime("end_time"),
+                    resultSet.getString("room_number")
+            ));
+        }
+        return list;
     }
 }

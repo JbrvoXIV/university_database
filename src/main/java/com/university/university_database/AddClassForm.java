@@ -9,6 +9,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.net.URL;
 import java.sql.Time;
@@ -41,12 +42,21 @@ public class AddClassForm implements Initializable {
         } catch(Exception ex) {
             System.out.println(ex.getMessage());
         }
+
+        courseID.setCellValueFactory(new PropertyValueFactory<>("courseID"));
+        startTime.setCellValueFactory(new PropertyValueFactory<>("startTime"));
+        endTime.setCellValueFactory(new PropertyValueFactory<>("endTime"));
+        roomNumber.setCellValueFactory(new PropertyValueFactory<>("roomNumber"));
+        professorForCourse.setCellValueFactory(new PropertyValueFactory<>("professorName"));
+
         populateAvailableCourseTable();
     }
 
     private void populateAvailableCourseTable() {
         try {
             ObservableList<Course> list = SQLController.getAvailableCoursesForUser(userType);
+            classesAvailableTable.setItems(list);
+            classesAvailableTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         } catch(Exception ex) {
             System.out.println(ex.getMessage());
         }

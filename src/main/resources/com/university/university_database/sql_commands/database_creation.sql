@@ -38,13 +38,15 @@ CREATE TABLE PROFESSOR (
 CREATE TABLE COURSE (
 	course_id VARCHAR(7) UNIQUE NOT NULL,
     professor_id INT NOT NULL,
+    department_id INT NOT NULL,
     course_name VARCHAR(100) UNIQUE NOT NULL,
     instructor_name VARCHAR(50) NOT NULL,
     start_time TIME,
     end_time TIME,
     room_number VARCHAR(10),
     PRIMARY KEY (course_id),
-    FOREIGN KEY (professor_id) REFERENCES PROFESSOR (professor_id)
+    FOREIGN KEY (professor_id) REFERENCES PROFESSOR (professor_id),
+    FOREIGN KEY (department_id) REFERENCES DEPARTMENT (department_id)
 );
 
 CREATE TABLE ENROLLMENT (
