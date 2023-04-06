@@ -4,6 +4,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -21,8 +22,8 @@
         </columnConstraints>
         <rowConstraints>
           <RowConstraints fx:id="userPortalWelcome" maxHeight="285.0" minHeight="0.0" prefHeight="245.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="285.0" minHeight="40.0" prefHeight="110.20003662109377" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="125.39996337890625" minHeight="0.0" prefHeight="109.39996337890625" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="285.0" minHeight="40.0" prefHeight="156.79996337890628" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="125.39996337890625" minHeight="0.0" prefHeight="87.20003662109377" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
             <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" styleClass="userNavBarInfo">
@@ -47,12 +48,13 @@
                   </Label>
                </children>
             </VBox>
-            <HBox prefHeight="126.0" prefWidth="200.0" styleClass="portalButtonHBox" GridPane.rowIndex="1">
+            <VBox styleClass="vBoxNavBar" GridPane.rowIndex="1">
                <children>
                   <Button mnemonicParsing="false" onAction="#switchToAddClassForm" text="Add a Class" textAlignment="CENTER" />
                   <Button mnemonicParsing="false" onAction="#removeClass" text="Remove a Class" />
+                  <Button mnemonicParsing="false" onAction="#updateGrade" text="Update Grade" />
                </children>
-            </HBox>
+            </VBox>
             <HBox layoutX="10.0" layoutY="267.0" prefHeight="126.0" prefWidth="200.0" styleClass="portalButtonHBox" GridPane.rowIndex="2">
                <children>
                   <Button mnemonicParsing="false" onAction="#switchToUserUpdateForm" text="Change User Info" />
@@ -61,16 +63,21 @@
             </HBox>
          </children>
       </GridPane>
-      <TableView fx:id="courseTable" editable="true" prefHeight="503.0" prefWidth="500.0" styleClass="courseTable">
-        <columns>
-          <TableColumn fx:id="courseID" prefWidth="75.0" text="Course ID" />
-          <TableColumn fx:id="courseName" prefWidth="75.0" text="Course Name" />
-            <TableColumn fx:id="startTime" prefWidth="75.0" text="Start Time" />
-            <TableColumn fx:id="endTime" prefWidth="75.0" text="End Time" />
-            <TableColumn fx:id="roomNumber" prefWidth="75.0" text="Room Number" />
-            <TableColumn fx:id="professorForCourse" prefWidth="75.0" text="Professor" />
-        </columns>
-      </TableView>
+      <ScrollPane fx:id="portalScrollPane">
+         <content>
+            <TableView fx:id="courseTable" editable="true" prefHeight="503.0" prefWidth="500.0" styleClass="courseTable">
+              <columns>
+                <TableColumn fx:id="courseID" prefWidth="75.0" text="Course ID" />
+                <TableColumn fx:id="courseName" prefWidth="75.0" text="Course Name" />
+                  <TableColumn fx:id="startTime" prefWidth="75.0" text="Start Time" />
+                  <TableColumn fx:id="endTime" prefWidth="75.0" text="End Time" />
+                  <TableColumn fx:id="roomNumber" prefWidth="75.0" text="Room Number" />
+                  <TableColumn fx:id="professorForCourse" prefWidth="75.0" text="Professor" />
+                  <TableColumn fx:id="grade" prefWidth="75.0" text="Grade" />
+              </columns>
+            </TableView>
+         </content>
+      </ScrollPane>
    </children>
    <stylesheets>
       <URL value="@styles/userPortal.css" />

@@ -10,6 +10,11 @@
     -fx-alignment: center;
 }
 
+.vBoxNavBar {
+	-fx-alignment: center;
+	-fx-spacing: 10px;
+}
+
 .userNavBarInfo {
 	-fx-background-color:
        -fx-shadow-highlight-color, 
@@ -21,7 +26,7 @@
 }
 
 .portalButtonHBox {
-	-fx-alignment: center;
+	-fx-alignment: top-center;
 	-fx-spacing: 5px;
 }
 
@@ -31,7 +36,7 @@
 }
 
 .courseTable {
-    -fx-pref-width: inherit;
+    -fx-pref-width: 650px;
     -fx-fixed-cell-size: 50px;
 }
 
@@ -41,6 +46,6 @@
 
 .table-view .table-cell {
     -fx-cell-size-type: ROWS;
-    -fx-cell-size: 50px; /* Set the height of each row */
+    -fx-cell-size: 100px; /* Set the height of each row */
     -fx-wrap-text: true; /* Wrap text in each cell */
 }

@@ -4,10 +4,15 @@ import com.university.university_database.schemas.CurrentUser;
 import com.university.university_database.schemas.Person;
 import com.university.university_database.schemas.Table;
 import javafx.animation.PauseTransition;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -28,7 +33,8 @@ public class SceneHandler {
         PROFESSOR_PORTAL("professorPortal.fxml", "Professor Portal"),
         ADD_CLASS_FORM("addClassForm.fxml", "Form"),
         STUDENT_UPDATE_INFO_FORM("studentUpdateForm.fxml", "Update Student"),
-        PROFESSOR_UPDATE_INFO_FORM("professorUpdateForm.fxml", "Update Professor");
+        PROFESSOR_UPDATE_INFO_FORM("professorUpdateForm.fxml", "Update Professor"),
+        NEW_GRADE_FORM("newGradeForm.fxml", "Update Grade");
 
         private final String file;
         private final String title;
@@ -138,6 +144,23 @@ public class SceneHandler {
             loadSceneHelper(Files.STUDENT_UPDATE_INFO_FORM.getFile(), Files.STUDENT_UPDATE_INFO_FORM.getTitle());
         else
             loadSceneHelper(Files.PROFESSOR_UPDATE_INFO_FORM.getFile(), Files.PROFESSOR_UPDATE_INFO_FORM.getTitle());
+    }
+
+    public static void loadUpdateGradeModal(ActionEvent e) {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(SceneHandler.class.getResource(Files.NEW_GRADE_FORM.getFile()));
+            AnchorPane modal = loader.load();
+            Stage stage = new Stage();
+            Scene scene = new Scene(modal);
+            stage.setTitle(Files.NEW_GRADE_FORM.getTitle());
+            stage.setScene(scene);
+            stage.show();
+        } catch(NullPointerException ex) {
+            printErrorFileNull(Files.NEW_GRADE_FORM.getFile());
+        } catch(Exception ex) {
+            printExceptionMessage(ex);
+        }
     }
 
     public static void triggerAlert(Alert.AlertType alertType, String title, String message, Exception ex) {

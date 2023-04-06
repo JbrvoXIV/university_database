@@ -204,11 +204,12 @@ public class SQLController {
     }
 
     public static ObservableList<Course> getCoursesForUser(Table table, Person p) throws SQLException {
+        boolean isStudent = table == Table.STUDENT;
         ObservableList<Course> list = FXCollections.observableArrayList();
         Statement statement;
         ResultSet resultSet;
         String queryString = "";
-        if(table == Table.STUDENT) {
+        if(isStudent) {
             queryString = String.format(
                     "SELECT *\n" +
                             "FROM COURSE\n" +
@@ -231,6 +232,7 @@ public class SQLController {
             Time startTime = resultSet.getTime("start_time");
             Time endTime = resultSet.getTime("end_time");
             String roomNumber = resultSet.getString("room_number");
+            String grade = isStudent ? resultSet.getString("grade") : null;
 
             list.add(new Course(
                     courseID,
@@ -239,7 +241,8 @@ public class SQLController {
                     professorName,
                     startTime,
                     endTime,
-                    roomNumber
+                    roomNumber,
+                    grade
             ));
         }
 
@@ -290,14 +293,24 @@ public class SQLController {
         }
 
         while(resultSet.next()) {
+            String courseID = resultSet.getString("course_id");
+            int professorID = resultSet.getInt("professor_id");
+            String courseName = resultSet.getString("course_name");
+            String instructorName = resultSet.getString("instructor_name");
+            Time startTime = resultSet.getTime("start_time");
+            Time endTime = resultSet.getTime("end_time");
+            String roomNumber = resultSet.getString("room_number");
+            String defaultGrade = "A";
+
             list.add(new Course(
-                    resultSet.getString("course_id"),
-                    resultSet.getInt("professor_id"),
-                    resultSet.getString("course_name"),
-                    resultSet.getString("instructor_name"),
-                    resultSet.getTime("start_time"),
-                    resultSet.getTime("end_time"),
-                    resultSet.getString("room_number")
+                    courseID,
+                    professorID,
+                    courseName,
+                    instructorName,
+                    startTime,
+                    endTime,
+                    roomNumber,
+                    defaultGrade
             ));
         }
 
@@ -321,6 +334,27 @@ public class SQLController {
         preparedStatement.close();
 
         return rowsUpdated == 1;
+    }
+
+    public static boolean updateGrade(String grade) {
+        Student s = (Student)CurrentUser.getUser();
+        Course course = NewGradeFormController.getSelectedCourse();
+        String queryString =
+                "UPDATE ENROLLMENT\n" +
+                "SET grade = ?\n" +
+                "WHERE course_id = ?\n" +
+                "AND student_id = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(queryString);
+            preparedStatement.setString(1, grade);
+            preparedStatement.setString(2, course.getCourseID());
+            preparedStatement.setInt(3, s.getID());
+            int rowsUpdated = preparedStatement.executeUpdate();
+            return rowsUpdated == 1;
+        } catch(Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return false;
     }
 
     public static boolean removeClass(Course selectedCourse) throws SQLException {

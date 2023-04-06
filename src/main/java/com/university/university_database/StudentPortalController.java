@@ -8,11 +8,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.net.URL;
@@ -28,6 +24,8 @@ public class StudentPortalController implements Initializable {
     @FXML
     private Label studentMajorDisplay;
     @FXML
+    private ScrollPane portalScrollPane;
+    @FXML
     private TableView<Course> courseTable;
     @FXML
     private TableColumn<Course, String> courseID;
@@ -41,9 +39,12 @@ public class StudentPortalController implements Initializable {
     private TableColumn<Course, String> roomNumber;
     @FXML
     private TableColumn<Course, String> professorForCourse;
+    @FXML
+    private TableColumn<Course, String> grade;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        portalScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         String userID = String.valueOf(CurrentUser.getUser().getID());
         String userPassword = CurrentUser.getUser().getPassword();
         try {
@@ -62,6 +63,7 @@ public class StudentPortalController implements Initializable {
         endTime.setCellValueFactory(new PropertyValueFactory<>("endTime"));
         roomNumber.setCellValueFactory(new PropertyValueFactory<>("roomNumber"));
         professorForCourse.setCellValueFactory(new PropertyValueFactory<>("professorName"));
+        grade.setCellValueFactory(new PropertyValueFactory<>("grade"));
     }
 
     public void switchToAddClassForm(ActionEvent e) {
@@ -103,15 +105,29 @@ public class StudentPortalController implements Initializable {
         }
     }
 
-    /* WIP */
     public void switchToUserUpdateForm(ActionEvent e) {
         SceneHandler.loadUserUpdateForm(Table.STUDENT);
     }
 
-    /* WIP */
     public void logout(ActionEvent e) {
         CurrentUser.setUser(null);
         SceneHandler.loadStudentLogin();
+    }
+
+    public void updateGrade(ActionEvent e) {
+        Course selectedCourse = courseTable.getSelectionModel().getSelectedItem();
+        if(selectedCourse != null) {
+            NewGradeFormController.setSelectedCourse(selectedCourse);
+            SceneHandler.loadUpdateGradeModal(e);
+        }
+        else {
+            SceneHandler.triggerAlert(
+                    Alert.AlertType.ERROR,
+                    "Error",
+                    "No class selected!",
+                    new InputMismatchException("Please select a course to update grade")
+            );
+        }
     }
 
     private void populateTable(Person student) {

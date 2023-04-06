@@ -11,8 +11,9 @@ public class Course {
     private Time startTime;
     private Time endTime;
     private String roomNumber;
+    private String grade;
 
-    public Course(String courseID, int professorID, String courseName, String professorName, Time startTime, Time endTime, String roomNumber) {
+    public Course(String courseID, int professorID, String courseName, String professorName, Time startTime, Time endTime, String roomNumber, String grade) {
         this.courseID = courseID;
         this.professorID = professorID;
         this.courseName = courseName;
@@ -20,6 +21,7 @@ public class Course {
         this.startTime = startTime;
         this.endTime = endTime;
         this.roomNumber = roomNumber;
+        this.grade = grade;
     }
 
     public String getCourseID() {
@@ -48,5 +50,9 @@ public class Course {
 
     public String getRoomNumber() {
         return roomNumber;
+    }
+
+    public String getGrade() {
+        return grade;
     }
 }
