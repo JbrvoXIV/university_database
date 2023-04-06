@@ -4,6 +4,7 @@ import com.university.university_database.schemas.Course;
 import com.university.university_database.schemas.CurrentUser;
 import com.university.university_database.schemas.Table;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -13,6 +14,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.net.URL;
 import java.sql.Time;
+import java.util.InputMismatchException;
 import java.util.ResourceBundle;
 
 public class AddClassForm implements Initializable {
@@ -37,7 +39,7 @@ public class AddClassForm implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
             String department = SQLController.queryDepartment(CurrentUser.getUser().getDepartmentID());
-            String newLabelText = String.format("%s %s", classesForDepartmentLabel.getText(), department);
+            String newLabelText = String.format("%s%s", classesForDepartmentLabel.getText(), department);
             classesForDepartmentLabel.setText(newLabelText);
         } catch(Exception ex) {
             System.out.println(ex.getMessage());
@@ -54,7 +56,7 @@ public class AddClassForm implements Initializable {
 
     private void populateAvailableCourseTable() {
         try {
-            ObservableList<Course> list = SQLController.getAvailableCoursesForUser(userType);
+            ObservableList<Course> list = SQLController.getAvailableCoursesForUser();
             classesAvailableTable.setItems(list);
             classesAvailableTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         } catch(Exception ex) {
@@ -68,5 +70,72 @@ public class AddClassForm implements Initializable {
 
     public static void setUserType(Table userType) {
         AddClassForm.userType = userType;
+    }
+
+    public void returnToPortal(ActionEvent e) {
+        if(userType == Table.STUDENT)
+            SceneHandler.loadStudentPortal();
+        else
+            SceneHandler.loadProfessorPortal();
+    }
+
+    public void addClass(ActionEvent e) {
+        Course selectedCourse = classesAvailableTable.getSelectionModel().getSelectedItem();
+        if(selectedCourse != null) {
+            try {
+                boolean classAdded = SQLController.addClass(selectedCourse);
+                if(classAdded) {
+                    SceneHandler.triggerAlert(
+                            "Success",
+                            "The class has been added",
+                            new Exception("The class, " + selectedCourse.getCourseID() + " is now viewable from your schedule")
+                            );
+                } else {
+                    SceneHandler.triggerAlert(
+                            "Error",
+                            "There was an unexpected error",
+                            new Exception("The class, " + selectedCourse.getCourseID() + " was unable to be added to your schedule")
+                    );
+                }
+            } catch(Exception ex) {
+                System.out.println(ex.getMessage());
+            }
+        } else {
+            SceneHandler.triggerAlert(
+                    "Error",
+                    "You have not chosen a class!",
+                    new InputMismatchException("Please select a course before pressing 'Add'")
+            );
+        }
+    }
+
+    public void removeClass(ActionEvent e) {
+        Course selectedCourse = classesAvailableTable.getSelectionModel().getSelectedItem();
+        if(selectedCourse != null) {
+            try {
+                boolean classRemoved = SQLController.removeClass(selectedCourse);
+                if(classRemoved) {
+                    SceneHandler.triggerAlert(
+                            "Success",
+                            "The class has been removed",
+                            new Exception("The class, " + selectedCourse.getCourseID() + ", is no longer on your schedule")
+                    );
+                } else {
+                    SceneHandler.triggerAlert(
+                            "Error",
+                            "There was an unexpected error",
+                            new Exception("The class, " + selectedCourse.getCourseID() + ", was unable to be removed from your schedule")
+                    );
+                }
+            } catch(Exception ex) {
+                System.out.println(ex.getMessage());
+            }
+        } else {
+            SceneHandler.triggerAlert(
+                    "Error",
+                    "You have not chosen a class!",
+                    new InputMismatchException("Please select a course before pressing 'Remove Class'")
+            );
+        }
     }
 }

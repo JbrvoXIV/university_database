@@ -50,12 +50,12 @@
             <HBox prefHeight="126.0" prefWidth="200.0" styleClass="portalButtonHBox" GridPane.rowIndex="1">
                <children>
                   <Button mnemonicParsing="false" onAction="#switchToAddClassForm" text="Add a Class" textAlignment="CENTER" />
-                  <Button mnemonicParsing="false" text="Remove a Class" />
+                  <Button mnemonicParsing="false" onAction="#removeClass" text="Remove a Class" />
                </children>
             </HBox>
             <HBox layoutX="10.0" layoutY="267.0" prefHeight="126.0" prefWidth="200.0" styleClass="portalButtonHBox" GridPane.rowIndex="2">
                <children>
-                  <Button mnemonicParsing="false" text="Change User Info" />
+                  <Button mnemonicParsing="false" onAction="#changeUserInfo" text="Change User Info" />
                   <Button mnemonicParsing="false" onAction="#logout" text="Log Out" />
                </children>
             </HBox>

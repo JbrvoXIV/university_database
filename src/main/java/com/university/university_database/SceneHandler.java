@@ -2,10 +2,8 @@ package com.university.university_database;
 
 import com.university.university_database.schemas.CurrentUser;
 import com.university.university_database.schemas.Person;
-import com.university.university_database.schemas.Student;
 import com.university.university_database.schemas.Table;
 import javafx.animation.PauseTransition;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -88,7 +86,8 @@ public class SceneHandler {
         loadSceneHelper(Files.ADD_CLASS_FORM.getFile(), Files.ADD_CLASS_FORM.getTitle());
     }
 
-    public static void loadUserPortal(Person p, Label idDisplay, Label departmentDisplay) throws SQLException {
+    public static void loadUserPortal(Label idDisplay, Label departmentDisplay) throws SQLException {
+        Person p = CurrentUser.getUser();
         String idDisplayText = String.format("%s %s", idDisplay.getText(), p.getID());
         String department = SQLController.queryDepartment(p.getDepartmentID());
         String majorDisplayText = String.format("%s %s", departmentDisplay.getText(), department);;

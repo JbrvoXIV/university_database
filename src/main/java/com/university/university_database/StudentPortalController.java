@@ -48,7 +48,7 @@ public class StudentPortalController implements Initializable {
             Person p = SQLController.queryLogin(Table.STUDENT, userID, userPassword);
             if(p == null)
                 throw new SQLException("User not found!");
-            SceneHandler.loadUserPortal(p, studentIDDisplay, studentMajorDisplay);
+            SceneHandler.loadUserPortal(studentIDDisplay, studentMajorDisplay);
             populateTable(p);
         } catch(Exception ex) {
             System.out.println(ex.getMessage());
@@ -71,7 +71,7 @@ public class StudentPortalController implements Initializable {
     }
 
     /* WIP */
-    public void updateUserInfo(ActionEvent e) {
+    public void changeUserInfo(ActionEvent e) {
     }
 
     /* WIP */

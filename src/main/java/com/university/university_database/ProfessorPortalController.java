@@ -45,7 +45,7 @@ public class ProfessorPortalController implements Initializable {
             Person p = SQLController.queryLogin(Table.PROFESSOR, userID, userPassword);
             if(p == null)
                 throw new SQLException("User not found!");
-            SceneHandler.loadUserPortal(p, professorIDDisplay, professorMajorDisplay);
+            SceneHandler.loadUserPortal(professorIDDisplay, professorMajorDisplay);
             populateTable(p);
         } catch(Exception ex) {
             System.out.println(ex.getMessage());

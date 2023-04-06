@@ -7,12 +7,11 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="573.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.university.university_database.AddClassForm">
    <children>
       <Label styleClass="mainTitle" text="Add Class Form" />
-      <Button layoutX="69.0" layoutY="352.0" mnemonicParsing="false" text="Search" />
-      <Button layoutX="226.0" layoutY="352.0" mnemonicParsing="false" text="Back" />
+      <Button layoutX="69.0" layoutY="352.0" mnemonicParsing="false" onAction="#addClass" text="Add" />
+      <Button layoutX="226.0" layoutY="352.0" mnemonicParsing="false" onAction="#returnToPortal" text="Back" />
       <TableView fx:id="classesAvailableTable" layoutY="137.0" prefHeight="207.0" prefWidth="200.0">
         <columns>
           <TableColumn fx:id="courseID" prefWidth="75.0" text="Course ID" />

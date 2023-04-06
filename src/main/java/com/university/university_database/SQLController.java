@@ -3,6 +3,7 @@ package com.university.university_database;
 import com.university.university_database.schemas.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.Scene;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -251,44 +252,37 @@ public class SQLController {
     }
 
     /* WIP */
-    public static ObservableList<Course> getAvailableCoursesForUser(Table userType) throws SQLException {
+    public static ObservableList<Course> getAvailableCoursesForUser() throws SQLException {
         ObservableList<Course> list = FXCollections.observableArrayList();
         PreparedStatement preparedStatement;
         ResultSet resultSet;
-        if(userType == Table.STUDENT) {
-            int studentID = CurrentUser.getUser().getID();
-            String queryString = "SELECT *\n" +
-                    "FROM COURSE\n" +
-                    "WHERE department_id = (\n" +
-                    "    SELECT major_id\n" +
-                    "    FROM STUDENT\n" +
-                    "    WHERE student_id = ?\n" +
-                    ")\n" +
-                    "AND course_id NOT IN (\n" +
-                    "    SELECT course_id\n" +
-                    "    FROM ENROLLMENT\n" +
-                    "    WHERE student_id = ?\n" +
-                    ")";
-            preparedStatement = connection.prepareStatement(queryString);
-            preparedStatement.setInt(1, studentID);
-            preparedStatement.setInt(2, studentID);
-        } else {
-            int professorID = CurrentUser.getUser().getID();
-            int departmentID = CurrentUser.getUser().getDepartmentID();
-            String queryString = "SELECT * FROM COURSE\nWHERE department_id = ?\nAND professor_id <> ?";
-            preparedStatement = connection.prepareStatement(queryString);
-            preparedStatement.setInt(1, departmentID);
-            preparedStatement.setInt(2, professorID);
-        }
+        int studentID = CurrentUser.getUser().getID();
+        String queryString = "SELECT *\n" +
+                "FROM COURSE\n" +
+                "WHERE department_id = (\n" +
+                "    SELECT major_id\n" +
+                "    FROM STUDENT\n" +
+                "    WHERE student_id = ?\n" +
+                ")\n" +
+                "AND course_id NOT IN (\n" +
+                "    SELECT course_id\n" +
+                "    FROM ENROLLMENT\n" +
+                "    WHERE student_id = ?\n" +
+                ")";
 
+        preparedStatement = connection.prepareStatement(queryString);
+        preparedStatement.setInt(1, studentID);
+        preparedStatement.setInt(2, studentID);
         resultSet = preparedStatement.executeQuery();
 
-        if(!resultSet.next()) {
+        if(!resultSet.isBeforeFirst()) {
             SceneHandler.triggerAlert(
                     "No Results Found!",
                     "Please refer to the description for more information.",
                     new NoSuchElementException("There are no classes available for you or you've already maxed out class list.")
                     );
+            preparedStatement.close();
+            resultSet.close();
             return null;
         }
 
@@ -303,6 +297,30 @@ public class SQLController {
                     resultSet.getString("room_number")
             ));
         }
+
+        preparedStatement.close();
+        resultSet.close();
+
         return list;
+    }
+
+    public static boolean addClass(Course selectedCourse) throws SQLException {
+        String queryString =
+                "INSERT INTO ENROLLMENT (student_id, course_id, grade)\n" +
+                "VALUES (?, ?, \"A\")"; //default grade is A, can be changed through update in portal
+        PreparedStatement preparedStatement;
+
+        preparedStatement = connection.prepareStatement(queryString);
+        preparedStatement.setInt(1, CurrentUser.getUser().getID());
+        preparedStatement.setString(2, selectedCourse.getCourseID());
+        int rowsUpdated = preparedStatement.executeUpdate();
+
+        preparedStatement.close();
+
+        return rowsUpdated == 1;
+    }
+
+    public static boolean removeClass(Course selectedCourse) {
+        return false;
     }
 }
