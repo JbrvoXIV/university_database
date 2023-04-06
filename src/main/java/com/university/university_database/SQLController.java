@@ -366,7 +366,7 @@ public class SQLController {
             preparedStatement.setDate(7, Date.valueOf(s.getDob()));
             preparedStatement.setInt(8, p.getID());
         } else {
-            preparedStatement.setString(7, "professor_id");
+            preparedStatement.setInt(7, p.getID());
         }
 
         int rowsUpdated = preparedStatement.executeUpdate();

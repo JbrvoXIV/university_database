@@ -63,6 +63,13 @@ public class ProfessorRegistrationController implements Initializable {
 
         try {
             insertNewProfessor(p);
+            SceneHandler.triggerAlert(
+                    Alert.AlertType.CONFIRMATION,
+                    "INSERT Success",
+                    "Professor was created",
+                    new Exception("Professor was successfully created, you may now log in!" +
+                            " Classes may only be added through admin privileges (MySQL Database).")
+            );
         } catch(Exception ex) {
             SceneHandler.triggerAlert(Alert.AlertType.ERROR, "INSERT Failed", "The insert failed! See below for more details.", ex);
         }
