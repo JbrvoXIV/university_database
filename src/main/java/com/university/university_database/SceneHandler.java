@@ -26,7 +26,9 @@ public class SceneHandler {
         PROFESSOR_REGISTRATION("professorRegistration.fxml", "Professor Registration Form"),
         STUDENT_PORTAL("studentPortal.fxml", "Student Portal"),
         PROFESSOR_PORTAL("professorPortal.fxml", "Professor Portal"),
-        ADD_CLASS_FORM("addClassForm.fxml", "Form");
+        ADD_CLASS_FORM("addClassForm.fxml", "Form"),
+        STUDENT_UPDATE_INFO_FORM("studentUpdateForm.fxml", "Update Student"),
+        PROFESSOR_UPDATE_INFO_FORM("professorUpdateForm.fxml", "Update Professor");
 
         private final String file;
         private final String title;
@@ -82,7 +84,7 @@ public class SceneHandler {
     }
 
     public static void loadAddClassForm(Table table) {
-        AddClassForm.setUserType(table);
+        AddClassFormController.setUserType(table);
         loadSceneHelper(Files.ADD_CLASS_FORM.getFile(), Files.ADD_CLASS_FORM.getTitle());
     }
 
@@ -114,27 +116,32 @@ public class SceneHandler {
      public static boolean handleLoginVerification(Table table, Label messageLabel, TextField usernameField, PasswordField passwordField) {
          String id = usernameField.getText();
          String password = passwordField.getText();
-         PauseTransition pauseTransition = new PauseTransition(Duration.seconds(3));
          Person p;
          try {
              p = SQLController.queryLogin(table, id, password);
              CurrentUser.setUser(p);
          } catch(SQLSyntaxErrorException ex) {
-             pauseTransition.setOnFinished(event -> messageLabel.setText("ID is not numerical, please try again"));
+             messageLabel.setText("ID is not numerical, please try again");
              printExceptionMessage(ex);
              return false;
          } catch(Exception ex) {
-             pauseTransition.setOnFinished(event -> messageLabel.setText(ex.getMessage()));
+             messageLabel.setText(ex.getMessage());
              printExceptionMessage(ex);
              return false;
-         } finally {
-             pauseTransition.play();
          }
          return true;
      }
 
-    public static void triggerAlert(String title, String message, Exception ex) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
+    public static void loadUserUpdateForm(Table table) {
+        UpdateFormController.setUserType(table);
+        if(table == Table.STUDENT)
+            loadSceneHelper(Files.STUDENT_UPDATE_INFO_FORM.getFile(), Files.STUDENT_UPDATE_INFO_FORM.getTitle());
+        else
+            loadSceneHelper(Files.PROFESSOR_UPDATE_INFO_FORM.getFile(), Files.PROFESSOR_UPDATE_INFO_FORM.getTitle());
+    }
+
+    public static void triggerAlert(Alert.AlertType alertType, String title, String message, Exception ex) {
+        Alert alert = new Alert(alertType);
         alert.setTitle(title);
         alert.setHeaderText(message);
         alert.setContentText(ex.getMessage());

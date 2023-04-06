@@ -4,6 +4,7 @@ import com.university.university_database.schemas.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -277,6 +278,7 @@ public class SQLController {
 
         if(!resultSet.isBeforeFirst()) {
             SceneHandler.triggerAlert(
+                    Alert.AlertType.ERROR,
                     "No Results Found!",
                     "Please refer to the description for more information.",
                     new NoSuchElementException("There are no classes available for you or you've already maxed out class list.")
@@ -320,7 +322,54 @@ public class SQLController {
         return rowsUpdated == 1;
     }
 
-    public static boolean removeClass(Course selectedCourse) {
-        return false;
+    public static boolean removeClass(Course selectedCourse) throws SQLException {
+        String queryString = "DELETE FROM ENROLLMENT WHERE student_id = ? AND course_id = ?;";
+        PreparedStatement preparedStatement = connection.prepareStatement(queryString);
+        preparedStatement.setInt(1, CurrentUser.getUser().getID());
+        preparedStatement.setString(2, selectedCourse.getCourseID());
+
+        int rowsRemoved = preparedStatement.executeUpdate();
+
+        return rowsRemoved == 1;
+    }
+
+    public static boolean updateUser(Table userType, Person p) throws SQLException {
+        StringBuilder queryString;
+        boolean isStudent = userType == Table.STUDENT;
+        PreparedStatement preparedStatement;
+
+        /* create query string based on userType */
+        if(isStudent)
+            queryString = new StringBuilder("UPDATE STUDENT\n");
+        else
+            queryString = new StringBuilder("UPDATE PROFESSOR\n");
+
+        queryString.append("SET password = ?, first_name = ?, last_name = ?, address = ?, phone_number = ?, email = ?");
+
+        if(isStudent) {
+            queryString.append(", dob = ?");
+            queryString.append("\nWHERE student_id = ?;");
+        } else {
+            queryString.append("\nWHERE professor_id = ?;");
+        }
+
+        preparedStatement = connection.prepareStatement(queryString.toString());
+        preparedStatement.setString(1, p.getPassword());
+        preparedStatement.setString(2, p.getFirstName());
+        preparedStatement.setString(3, p.getLastName());
+        preparedStatement.setString(4, p.getAddress());
+        preparedStatement.setString(5, p.getPhone());
+        preparedStatement.setString(6, p.getEmail());
+        if(isStudent) {
+            final Student s = (Student)p;
+            preparedStatement.setDate(7, Date.valueOf(s.getDob()));
+            preparedStatement.setInt(8, p.getID());
+        } else {
+            preparedStatement.setString(7, "professor_id");
+        }
+
+        int rowsUpdated = preparedStatement.executeUpdate();
+
+        return rowsUpdated == 1;
     }
 }

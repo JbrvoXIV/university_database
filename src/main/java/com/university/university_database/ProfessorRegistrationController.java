@@ -54,17 +54,17 @@ public class ProfessorRegistrationController implements Initializable {
             if(SQLController.queryForUserIDCheck(Table.PROFESSOR, p))
                 throw new InputMismatchException("User with ID " + ID + " already exists, cannot create new user.");
         } catch(InputMismatchException ex) {
-            SceneHandler.triggerAlert("Error", "The user ID already exists.", ex);
+            SceneHandler.triggerAlert(Alert.AlertType.ERROR, "Error", "The user ID already exists.", ex);
             return;
         } catch(Exception ex) {
-            SceneHandler.triggerAlert("Incorrect Input", "You've entered incorrect input, see below for more information.", ex);
+            SceneHandler.triggerAlert(Alert.AlertType.ERROR, "Incorrect Input", "You've entered incorrect input, see below for more information.", ex);
             return; // user input is incorrect, keep old inputs and prompt user to reenter or fix info
         }
 
         try {
             insertNewProfessor(p);
         } catch(Exception ex) {
-            SceneHandler.triggerAlert("INSERT Failed", "The insert failed! See below for more details.", ex);
+            SceneHandler.triggerAlert(Alert.AlertType.ERROR, "INSERT Failed", "The insert failed! See below for more details.", ex);
         }
     }
 

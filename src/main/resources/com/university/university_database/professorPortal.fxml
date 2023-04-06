@@ -49,7 +49,7 @@
             </VBox>
             <HBox prefHeight="126.0" prefWidth="200.0" styleClass="portalButtonHBox" GridPane.rowIndex="1">
                <children>
-                  <Button mnemonicParsing="false" onAction="#changeUserInfo" text="Change User Info" />
+                  <Button mnemonicParsing="false" onAction="#switchToUserUpdateForm" text="Change User Info" />
                </children>
             </HBox>
             <HBox layoutX="10.0" layoutY="267.0" prefHeight="126.0" prefWidth="200.0" styleClass="portalButtonHBox" GridPane.rowIndex="2">

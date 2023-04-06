@@ -7,6 +7,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -17,7 +18,7 @@ import java.sql.Time;
 import java.util.InputMismatchException;
 import java.util.ResourceBundle;
 
-public class AddClassForm implements Initializable {
+public class AddClassFormController implements Initializable {
 
     private static Table userType;
     @FXML
@@ -69,7 +70,7 @@ public class AddClassForm implements Initializable {
     }
 
     public static void setUserType(Table userType) {
-        AddClassForm.userType = userType;
+        AddClassFormController.userType = userType;
     }
 
     public void returnToPortal(ActionEvent e) {
@@ -86,12 +87,15 @@ public class AddClassForm implements Initializable {
                 boolean classAdded = SQLController.addClass(selectedCourse);
                 if(classAdded) {
                     SceneHandler.triggerAlert(
+                            Alert.AlertType.CONFIRMATION,
                             "Success",
                             "The class has been added",
                             new Exception("The class, " + selectedCourse.getCourseID() + " is now viewable from your schedule")
                             );
+                    populateAvailableCourseTable();
                 } else {
                     SceneHandler.triggerAlert(
+                            Alert.AlertType.ERROR,
                             "Error",
                             "There was an unexpected error",
                             new Exception("The class, " + selectedCourse.getCourseID() + " was unable to be added to your schedule")
@@ -102,39 +106,10 @@ public class AddClassForm implements Initializable {
             }
         } else {
             SceneHandler.triggerAlert(
+                    Alert.AlertType.ERROR,
                     "Error",
                     "You have not chosen a class!",
                     new InputMismatchException("Please select a course before pressing 'Add'")
-            );
-        }
-    }
-
-    public void removeClass(ActionEvent e) {
-        Course selectedCourse = classesAvailableTable.getSelectionModel().getSelectedItem();
-        if(selectedCourse != null) {
-            try {
-                boolean classRemoved = SQLController.removeClass(selectedCourse);
-                if(classRemoved) {
-                    SceneHandler.triggerAlert(
-                            "Success",
-                            "The class has been removed",
-                            new Exception("The class, " + selectedCourse.getCourseID() + ", is no longer on your schedule")
-                    );
-                } else {
-                    SceneHandler.triggerAlert(
-                            "Error",
-                            "There was an unexpected error",
-                            new Exception("The class, " + selectedCourse.getCourseID() + ", was unable to be removed from your schedule")
-                    );
-                }
-            } catch(Exception ex) {
-                System.out.println(ex.getMessage());
-            }
-        } else {
-            SceneHandler.triggerAlert(
-                    "Error",
-                    "You have not chosen a class!",
-                    new InputMismatchException("Please select a course before pressing 'Remove Class'")
             );
         }
     }

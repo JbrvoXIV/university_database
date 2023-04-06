@@ -35,6 +35,8 @@ public abstract class Person {
             return new IllegalArgumentException("The ID value you entered, " + ID + ", is incorrect! Please try again.");
         }
         if(!validatePassword(password)) {
+            if(password.isEmpty())
+                return new IllegalArgumentException("Cannot submit an empty password, please input something.");
             return new IllegalArgumentException("The password value you entered, " + password + ", is too long! Please try again.");
         }
         if(!firstName.matches("[a-zA-Z]+")) {
@@ -67,7 +69,7 @@ public abstract class Person {
     }
 
     private boolean validatePassword(String password) {
-        boolean isCorrectLength = password.length() <= 50;
+        boolean isCorrectLength = password.length() <= 50 && !password.isEmpty();
         return isCorrectLength;
     }
 

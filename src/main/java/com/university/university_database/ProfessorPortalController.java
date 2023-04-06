@@ -58,17 +58,8 @@ public class ProfessorPortalController implements Initializable {
         roomNumber.setCellValueFactory(new PropertyValueFactory<>("roomNumber"));
     }
 
-    /* WIP */
-    public void switchToAddClassForm(ActionEvent e) {
-        SceneHandler.loadAddClassForm(Table.PROFESSOR);
-    }
-
-    /* WIP */
-    public void removeClass(ActionEvent e) {
-    }
-
-    /* WIP */
-    public void updateUserInfo(ActionEvent e) {
+    public void switchToUserUpdateForm(ActionEvent e) {
+        SceneHandler.loadUserUpdateForm(Table.PROFESSOR);
     }
 
     /* WIP */

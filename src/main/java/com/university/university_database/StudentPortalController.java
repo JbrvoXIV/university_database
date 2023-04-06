@@ -9,6 +9,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -17,6 +18,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import java.net.URL;
 import java.sql.SQLException;
 import java.sql.Time;
+import java.util.InputMismatchException;
 import java.util.ResourceBundle;
 
 public class StudentPortalController implements Initializable {
@@ -68,10 +70,42 @@ public class StudentPortalController implements Initializable {
 
     /* WIP */
     public void removeClass(ActionEvent e) {
+        Course selectedCourse = courseTable.getSelectionModel().getSelectedItem();
+        if(selectedCourse != null) {
+            try {
+                boolean classRemoved = SQLController.removeClass(selectedCourse);
+                if(classRemoved) {
+                    SceneHandler.triggerAlert(
+                            Alert.AlertType.CONFIRMATION,
+                            "Success",
+                            "The class has been removed",
+                            new Exception("The class, " + selectedCourse.getCourseID() + ", is no longer on your schedule")
+                    );
+                    populateTable(CurrentUser.getUser());
+                } else {
+                    SceneHandler.triggerAlert(
+                            Alert.AlertType.ERROR,
+                            "Error",
+                            "There was an unexpected error",
+                            new Exception("The class, " + selectedCourse.getCourseID() + ", was unable to be removed from your schedule")
+                    );
+                }
+            } catch(Exception ex) {
+                System.out.println(ex.getMessage());
+            }
+        } else {
+            SceneHandler.triggerAlert(
+                    Alert.AlertType.ERROR,
+                    "Error",
+                    "You have not chosen a class!",
+                    new InputMismatchException("Please select a course before pressing 'Remove Class'")
+            );
+        }
     }
 
     /* WIP */
-    public void changeUserInfo(ActionEvent e) {
+    public void switchToUserUpdateForm(ActionEvent e) {
+        SceneHandler.loadUserUpdateForm(Table.STUDENT);
     }
 
     /* WIP */
