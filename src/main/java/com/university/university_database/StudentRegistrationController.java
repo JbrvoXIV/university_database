@@ -66,6 +66,12 @@ public class StudentRegistrationController implements Initializable {
 
         try {
             insertNewStudent(s);
+            SceneHandler.triggerAlert(
+                    Alert.AlertType.CONFIRMATION,
+                    "INSERT Success",
+                    "User was created",
+                    new Exception("User was successfully created, you may now log in!")
+                    );
         } catch(Exception ex) {
             SceneHandler.triggerAlert(Alert.AlertType.ERROR, "INSERT Failed", "The insert failed! See below for more details.", ex);
         }

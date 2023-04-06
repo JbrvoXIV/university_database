@@ -74,18 +74,19 @@ public class SQLController {
 
         insertStatement = String.format(
                 "INSERT INTO %s" +
-                "(student_id, password, first_name, last_name, address, phone_number, email, dob)" +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)", table.getTable()
+                "(student_id, password, major_id, first_name, last_name, address, phone_number, email, dob)" +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", table.getTable()
         );
         preparedStatement = connection.prepareStatement(insertStatement);
         preparedStatement.setInt(1, student.getID());
         preparedStatement.setString(2, student.getPassword());
-        preparedStatement.setString(3, student.getFirstName());
-        preparedStatement.setString(4, student.getLastName());
-        preparedStatement.setString(5, student.getAddress());
-        preparedStatement.setString(6, student.getPhone());
-        preparedStatement.setString(7, student.getEmail());
-        preparedStatement.setDate(8, getLocalDateAsSQLDate(student.getDob()));
+        preparedStatement.setInt(3, student.getDepartmentID());
+        preparedStatement.setString(4, student.getFirstName());
+        preparedStatement.setString(5, student.getLastName());
+        preparedStatement.setString(6, student.getAddress());
+        preparedStatement.setString(7, student.getPhone());
+        preparedStatement.setString(8, student.getEmail());
+        preparedStatement.setDate(9, getLocalDateAsSQLDate(student.getDob()));
 
         int rowsAffected = preparedStatement.executeUpdate();
         preparedStatement.close();
