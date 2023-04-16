@@ -1,7 +1,6 @@
 package com.university.university_database;
 
 import com.university.university_database.schemas.Department;
-import com.university.university_database.schemas.Person;
 import com.university.university_database.schemas.Professor;
 import com.university.university_database.schemas.Table;
 import javafx.event.ActionEvent;
@@ -9,7 +8,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
-import javafx.stage.Stage;
 
 import java.net.URL;
 import java.sql.SQLException;

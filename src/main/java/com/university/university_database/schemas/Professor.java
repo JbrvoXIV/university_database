@@ -1,7 +1,5 @@
 package com.university.university_database.schemas;
 
-import java.util.Arrays;
-
 public class Professor extends Person {
 
     public Professor(String ID, String password, String firstName, String lastName, String address, String phone, String email, int departmentID) {

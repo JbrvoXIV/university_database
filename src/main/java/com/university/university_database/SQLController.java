@@ -3,12 +3,10 @@ package com.university.university_database;
 import com.university.university_database.schemas.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 
 import java.sql.*;
 import java.time.LocalDate;
-import java.util.InputMismatchException;
 import java.util.NoSuchElementException;
 
 public class SQLController {
@@ -37,8 +35,6 @@ public class SQLController {
         }
     }
 
-    /************************************INSERT**********************************************************/
-
     /* main insert function, callable */
     public static int insert(Table table, Object insertObj) throws SQLException {
         int rowsAffected = 0;
@@ -51,18 +47,6 @@ public class SQLController {
                 Professor professor = (Professor)insertObj;
                 rowsAffected = executeProfessorInsert(table, professor);
             }
-//            case COURSES -> {
-//
-//            }
-//            case SCHEDULE -> {
-//
-//            }
-//            case DEPARTMENT -> {
-//
-//            }
-//            case ENROLLMENT -> {
-//
-//            }
         }
         return rowsAffected;
     }
@@ -120,8 +104,7 @@ public class SQLController {
         return rowsAffected;
     }
 
-    /************************************SELECT**********************************************************/
-
+    /* query to check if user exists (used for login verification) */
     public static boolean queryForUserIDCheck(Table table, Person p) throws SQLException {
         String tableToQuery = table.getTable();
         String idAttribute = tableToQuery.equals(Table.STUDENT.getTable()) ? "student_id" :"professor_id";
@@ -137,6 +120,7 @@ public class SQLController {
         return resultSet.next(); // user exists = true, otherwise = false;
     }
 
+    /* like the queryForUserIDCheck but returns Person object of user if found instead of boolean */
     public static Person queryLogin(Table table, String id, String password) throws SQLException, SQLSyntaxErrorException {
         Person p = null;
         String tableToQuery = table.getTable();
@@ -184,6 +168,7 @@ public class SQLController {
         return p;
     }
 
+    /* query for department based on department_id */
     public static String queryDepartment(int departmentID) throws SQLException {
         Statement statement;
         ResultSet resultSet;
@@ -203,6 +188,7 @@ public class SQLController {
         return departmentName;
     }
 
+    /* retrieve all courses associated with a user (professor or student) */
     public static ObservableList<Course> getCoursesForUser(Table table, Person p) throws SQLException {
         boolean isStudent = table == Table.STUDENT;
         ObservableList<Course> list = FXCollections.observableArrayList();
@@ -252,11 +238,13 @@ public class SQLController {
         return list;
     }
 
+
+    /* helper for converting LocalDate object to valid SQL Date type */
     private static Date getLocalDateAsSQLDate(LocalDate date) {
         return Date.valueOf(date);
     }
 
-    /* WIP */
+    /* queries for available courses that a student can take that are not currently enrolled and belong to the same department */
     public static ObservableList<Course> getAvailableCoursesForUser() throws SQLException {
         ObservableList<Course> list = FXCollections.observableArrayList();
         PreparedStatement preparedStatement;
@@ -320,6 +308,7 @@ public class SQLController {
         return list;
     }
 
+    /* add a class for the student */
     public static boolean addClass(Course selectedCourse) throws SQLException {
         String queryString =
                 "INSERT INTO ENROLLMENT (student_id, course_id, grade)\n" +
@@ -336,6 +325,7 @@ public class SQLController {
         return rowsUpdated == 1;
     }
 
+    /* update grade for student */
     public static boolean updateGrade(String grade) {
         Student s = (Student)CurrentUser.getUser();
         Course course = NewGradeFormController.getSelectedCourse();
@@ -357,6 +347,7 @@ public class SQLController {
         return false;
     }
 
+    /* remove a course assigned to a student */
     public static boolean removeClass(Course selectedCourse) throws SQLException {
         String queryString = "DELETE FROM ENROLLMENT WHERE student_id = ? AND course_id = ?;";
         PreparedStatement preparedStatement = connection.prepareStatement(queryString);
@@ -368,6 +359,7 @@ public class SQLController {
         return rowsRemoved == 1;
     }
 
+    /* update user info depending on if request came from professor side or student side */
     public static boolean updateUser(Table userType, Person p) throws SQLException {
         StringBuilder queryString;
         boolean isStudent = userType == Table.STUDENT;

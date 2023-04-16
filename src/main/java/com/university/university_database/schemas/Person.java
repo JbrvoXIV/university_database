@@ -1,7 +1,5 @@
 package com.university.university_database.schemas;
 
-import java.time.LocalDate;
-
 public abstract class Person {
 
     protected int ID;

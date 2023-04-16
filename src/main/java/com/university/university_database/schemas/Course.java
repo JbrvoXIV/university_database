@@ -1,7 +1,6 @@
 package com.university.university_database.schemas;
 
 import java.sql.Time;
-import java.time.LocalDate;
 
 public class Course {
     private String courseID;
